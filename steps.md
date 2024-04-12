@@ -86,7 +86,7 @@ Changing it to `exit 0` will ensure the commit works.
 ```sh
 npm install -D eslint@9 @eslint/js@9
 ```
-> I use @9 here to make my method work in this version, just in case, like, on the day you read this, the version of `ESLint` will change, if you should not be using v9, you may need to find another way of solution.
+> I use @9 here to make my method work in this version, just in case, like, on the day you read this, the version of `ESLint` will change, if you should not be using v9, and it has some breaking changes, you may need to find another way of solution.
 
 create `eslint.config.js` with the code below:
 
@@ -205,9 +205,85 @@ Notice: This way of linting is insufficient; for improved linting, please refer 
 
 ## Commit Message Format
 
-### Commit Message Format Setting
+### Install commit message linting tools
 
-## Add Commit Message Format to Git (Commit) Hook
+```sh
+npm install --save-dev @commitlint/{cli,config-conventional}
+```
+
+### Configure commit message linting tools
+
+```sh
+echo "export default { extends: ['@commitlint/config-conventional'] };" > commitlint.config.js
+```
+
+### Test commit message linting tools
+
+```sh
+npx commitlint --from HEAD~1 --to HEAD --verbose
+```
+
+You will encounter this error:
+
+![alt text](image-5.png)
+
+### Why you fail?
+
+The **test** above is mimicing a commit command of `git commit -m 'commit'`.
+
+In this case your **commit message** is `"commit"`,
+
+But we have the **rule** of commit message **format** which is configured in `commitlint.config.js`, stipulating the commit message should be structured as [follows](https://www.conventionalcommits.org/en/v1.0.0/#summary):
+
+```txt
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+i.e. your commit message must be at least like `"feat: your commit description ..."`,
+
+Your message of `"commit"` couldn't satisfy the rule, means you commit will fail.
+
+## Add Commit Message Format Rules to Git (Commit) Hook
+
+### add linting script to a hook
+
+```sh
+echo "npx --no -- commitlint --edit \$1" > .husky/commit-msg
+```
+
+you'll see a new created file `.husky/commit-msg` with the content below:
+
+![alt text](image-6.png)
+
+### Test the hook
+
+```sh
+git add .
+```
+
+```sh
+git commit -m "this will fail"
+```
+
+![alt text](image-7.png)
+
+```sh
+git commit -m "foo: this will also fail"
+```
+
+![alt text](image-8.png)
+
+```sh
+git commit -m "chore: this is a legal commit message"
+```
+
+![alt text](image-9.png)
+
+## Tailor your commit message format
 
 ## Add Git (Push) Hook
 
