@@ -285,6 +285,62 @@ git commit -m "chore: this is a legal commit message"
 
 ## Tailor your commit message format
 
+The [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0/#summary) may not fulfill your team's requirement.
+
+Sometimes you need to customise your rules.
+
+For instance, your team is using [Jira](https://www.atlassian.com/software/jira) for project and product management as well as issue tracking etc., you and your teammates make an appointment that, every commit should have a Jira ticket id, so you can trace back the real motivation (a product requirement, a technical optimization, a bug, etc.) of every code chage.
+
+To do this, edit your `commitlint.config.js` as below:
+
+```js
+export default {
+  extends: ['@commitlint/config-conventional'],
+  plugins: [
+    {
+      rules: {
+        'subject-prefix-with-jira-ticket-id': parsed => {
+          const { subject } = parsed
+          const match = subject ? subject.match(/^\[[A-Z]{3,5}-\d+\]\s/) : null
+          if (match) return [true, '']
+          return [
+            false,
+            `The commit message's subject must be prefixed with an uppercase JIRA ticket ID.
+    A correct commit message should be like: feat: [JIRA-1234] fulfill this feature
+    Your subject: ${subject}
+    Please revise your commit message.
+    `
+          ]
+        }
+      }
+    }
+  ],
+  rules: {
+    'subject-prefix-with-jira-ticket-id': [2, 'always']
+  }
+}
+```
+
+Now test it.
+
+```sh
+git commit -m 'chore: try to commit'
+```
+
+Oops!
+
+![alt text](image-10.png)
+
+Try another one:
+
+```sh
+git commit -m 'chore: [PRJ-1234] a commit with sample id'
+```
+
+Gotcha!
+
+![alt text](image-11.png)
+
 ## Add Git (Push) Hook
 
 ## DIY
