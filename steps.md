@@ -56,6 +56,8 @@ git add .
 git commit -m 'first commit'
 ```
 
+Here is what you'll see from the terminal console:
+
 ```console
 /workspaces/normalise-your-git-commit-and-push (main) $ git commit -m 'first commit'
 
@@ -66,9 +68,9 @@ Error: no test specified
 husky - pre-commit script failed (code 1)
 ```
 
-![alt text](image.png)
+![alt text](images/image.png)
 
-this is because we have an `exit 1` in `package.json`
+This is because we have an `exit 1` in `package.json`
 
 ```json
 "scripts": {
@@ -77,18 +79,27 @@ this is because we have an `exit 1` in `package.json`
 
 Changing it to `exit 0` will ensure the commit works.
 
+```diff
+"scripts": {
+-    "test": "echo \"Error: no test specified\" && exit 1",
++    "test": "exit 0",
+```
+
+![alt text](images/image-13.png)
+
 **In a real production codebase, you should specify your real `test` command, like Jest, Playwright, etc.**
 
-## linting Setting
+## Code Linting Setting
 
-### install & init your linting tool
+### install & init linting tool
 
 ```sh
 npm install -D eslint@9 @eslint/js@9
 ```
+
 > I use @9 here to make my method work in this version, just in case, like, on the day you read this, the version of `ESLint` will change, if you should not be using v9, and it has some breaking changes, you may need to find another way of solution.
 
-create `eslint.config.js` with the code below:
+create a `eslint.config.js` with the code below:
 
 ```js
 import pluginJs from "@eslint/js";
@@ -119,7 +130,7 @@ export const field = {
 npm run lint
 ```
 
-it will show some errors
+This will cause some errors:
 
 ```console
 /workspaces/normalise-your-git-commit-and-push (main) $ npm run lint
@@ -135,19 +146,25 @@ it will show some errors
 
 ```
 
-![alt text](image-1.png)
+![alt text](images/image-1.png)
 
 ## Add linting to Git (Commit) Hook
 
 ### put lint command to your Git hook
 
-add `npm run lint` to the first line of `.husky/pre-commit`
+Add `npm run lint` to the first line of `.husky/pre-commit`
 
 ```sh
 sed -i '1i npm run lint' .husky/pre-commit
 ```
 
-![alt text](image-2.png)
+`.husky/pre-commit`:
+
+```diff
++ npm run lint
+npm test
+```
+
 
 ### try committing
 
@@ -174,20 +191,20 @@ git commit -m 'second commit'
 husky - pre-commit script failed (code 1)
 ```
 
-![alt text](image-3.png)
+![alt text](images/image-3.png)
 
 you'll fail because you have to fix all the linting errors before committing the code.
 
 ### Fix the linting errors
 
-fix it by editing your `index.js`
+fix it by editing your `index.js`:
 
-```js
-const process = {
-    env: {
-        bit: 2
-    }
-}
+```diff
++const process = {
++    env: {
++        bit: 2
++    }
++}
 
 export const field = {
     "b": process.evn.bit,
@@ -195,13 +212,13 @@ export const field = {
 
 ```
 
-and commit again and it will work
+And commit again and it will work:
 
-![alt text](image-4.png)
+![alt text](images/image-4.png)
 
 > Notice: **both `npm run lint` and `npm test` in `pre-commit` need to pass before you can commit**
 
-Notice: This way of linting is insufficient; for improved linting, please refer to my other post.
+> Notice: This way of linting is insufficient in a production project; for improved linting, please refer to my other post.
 
 ## Commit Message Format
 
@@ -225,7 +242,7 @@ npx commitlint --from HEAD~1 --to HEAD --verbose
 
 You will encounter this error:
 
-![alt text](image-5.png)
+![alt text](images/image-5.png)
 
 ### Why you fail?
 
@@ -255,9 +272,13 @@ Your message of `"commit"` couldn't satisfy the rule, means you commit will fail
 echo "npx --no -- commitlint --edit \$1" > .husky/commit-msg
 ```
 
-you'll see a new created file `.husky/commit-msg` with the content below:
+You'll see a new created file `.husky/commit-msg` with the content below:
 
-![alt text](image-6.png)
+`.husky/commit-msg`:
+
+```diff
++npx --no -- commitlint --edit \$1
+```
 
 ### Test the hook
 
@@ -269,19 +290,19 @@ git add .
 git commit -m "this will fail"
 ```
 
-![alt text](image-7.png)
+![alt text](images/image-7.png)
 
 ```sh
 git commit -m "foo: this will also fail"
 ```
 
-![alt text](image-8.png)
+![alt text](images/image-8.png)
 
 ```sh
 git commit -m "chore: this is a legal commit message"
 ```
 
-![alt text](image-9.png)
+![alt text](images/image-9.png)
 
 ## Tailor your commit message format
 
@@ -329,7 +350,7 @@ git commit -m 'chore: try to commit'
 
 Oops!
 
-![alt text](image-10.png)
+![alt text](images/image-10.png)
 
 Try another one:
 
@@ -339,9 +360,46 @@ git commit -m 'chore: [PRJ-1234] a commit with sample id'
 
 Gotcha!
 
-![alt text](image-11.png)
+![alt text](images/image-11.png)
 
 ## Add Git (Push) Hook
+
+Let's modify our team's workflows to allow only **linted** code **commits** without **test** verification. However, we will permit code **pushes** only if they have already passed the **test** command. Therefore, we will move the `npm test` command from the `pre-commit` hook to a **Git push hook** named `pre-push`.
+
+`./husky/pre-commit`:
+
+```diff
+npm run lint
+- npm test
+```
+
+```sh
+echo "npm test" > .husky/pre-push
+```
+
+`./husky/pre-push`:
+
+```diff
++ npm test
+```
+
+Edit the `package.json`'s `test` command to force to test to fail:
+
+```diff
+"scripts": {
+-    "test": "echo \"Error: no test specified\" && exit 0",
++    "test": "echo \"Error: no test specified\" && exit 1",
+```
+
+Now if you try to push the code (of course you need to commit it first) you'll fail because we have a `exit 1` in the command.
+
+```sh
+git push origin main
+```
+
+![alt text](images/image-12.png)
+
+Revert `exit 1` to `exit 0`, or use your real test scripts that can pass, your code push to the remote repository will success!
 
 ## DIY
 
