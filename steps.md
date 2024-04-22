@@ -8,7 +8,7 @@ Catch a glimpse of what I'm going to do in this post.
 
 If you prefer to run the demo I've written rather than following the steps one by one, check out this [GitHub repository](https://github.com/graezykev/normalise-your-git-commit-and-push) to get a quick overview.
 
-## Init your Project
+## 1. Init your Project (if you haven't)
 
 ### Init NPM
 
@@ -19,7 +19,7 @@ npm init -y && \
 npm pkg set type="module"
 ```
 
-### Init Git Repo (if you haven't)
+### Init Git Repo
 
 ```sh
 git init && \
@@ -40,7 +40,7 @@ npm install -D husky@9
 npx husky init
 ```
 
-what does it mainly do?
+What does it mainly do?
 
 - create `hooksPath = .husky/_` in `.git/config`
 
@@ -48,7 +48,7 @@ what does it mainly do?
 
 - create a `.husky/pre-commit` hook
 
-- create a `prepare` script in `package.json`
+- create a `prepare` script in `package.json` with the command `husky`
 
 > `husky` is in some way included within `husky init`.
 
@@ -64,40 +64,32 @@ git add .
 git commit -m 'first commit'
 ```
 
-Here is what you'll see from the terminal console:
-
-```console
-/workspaces/normalise-your-git-commit-and-push (main) $ git commit -m 'first commit'
-
-> normalise-your-git-commit-and-push@1.0.0 test
-> echo "Error: no test specified" && exit 1
-
-Error: no test specified
-husky - pre-commit script failed (code 1)
-```
+Here is what you'll see from the terminal console.
 
 ![alt text](images/image.png)
 
-This is because we have an `exit 1` in `package.json`
+This is because we have an `exit 1` in `package.json`.
 
 ```json
 "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+  "test": "echo \"Error: no test specified\" && exit 1",
 ```
 
 Changing it to `exit 0` will ensure the commit works.
 
 ```diff
 "scripts": {
--    "test": "echo \"Error: no test specified\" && exit 1",
-+    "test": "exit 0",
+-  "test": "echo \"Error: no test specified\" && exit 1",
++  "test": "exit 0",
 ```
 
 ![alt text](images/image-13.png)
 
-**In a real production codebase, you should specify your real `test` command, like Jest, Playwright, etc.**
+> **In a real production codebase, you should specify your real `test` command, like Jest, Playwright, etc.**
 
-## Code Linting Setting
+## Simple Code Linting Setting
+
+For now, we only have a `test` command in our **pre commit** hook, next, we're going to supplement it with a **Linting** command, to check the **Code Style** before you commit JS code.
 
 ### Install & Init Linting Tools
 
@@ -105,9 +97,7 @@ Changing it to `exit 0` will ensure the commit works.
 npm install -D eslint@9 @eslint/js@9
 ```
 
-> I use @9 here to make my method work in this version, just in case, like, on the day you read this, the version of `ESLint` will change, if you should not be using v9, and it has some breaking changes, you may need to find another way of solution.
-
-create a `eslint.config.js` with the code below:
+Create a `eslint.config.js` with the code below.
 
 ```js
 import pluginJs from "@eslint/js";
@@ -119,12 +109,12 @@ export default [
 
 ### Add Linting Script to `package.json`
 
-```json
+```diff
 "scripts": {
-    "lint": "eslint ."
++  "lint": "eslint .",
 ```
 
-### Create a Demo `index.js`
+### Create a Demo `index.js` with the code
 
 ```js
 export const field = {
@@ -138,21 +128,7 @@ export const field = {
 npm run lint
 ```
 
-This will cause some errors:
-
-```console
-/workspaces/normalise-your-git-commit-and-push (main) $ npm run lint
-
-> normalise-your-git-commit-and-push@1.0.0 lint
-> eslint .
-
-
-/workspaces/normalise-your-git-commit-and-push/index.js
-  2:10  error  'process' is not defined  no-undef
-
-✖ 1 problem (1 error, 0 warnings)
-
-```
+This will cause some errors, because we haven't defined the variable `process` in the Demo code, which is not allowed in the ESLint rule.
 
 ![alt text](images/image-1.png)
 
@@ -183,28 +159,13 @@ git add .
 git commit -m 'second commit'
 ```
 
-```console
-/workspaces/normalise-your-git-commit-and-push (main) $ git commit -m 'second commit'
-
-> normalise-your-git-commit-and-push@1.0.0 lint
-> eslint .
-
-
-/workspaces/normalise-your-git-commit-and-push/index.js
-  2:10  error  'process' is not defined  no-undef
-
-✖ 1 problem (1 error, 0 warnings)
-
-husky - pre-commit script failed (code 1)
-```
-
 ![alt text](images/image-3.png)
 
-you'll fail because you have to fix all the linting errors before committing the code.
+You'll fail because you have to fix all the linting errors (we mentioned above) before committing the code.
 
 ### Fix the Linting Errors
 
-fix it by editing your `index.js`:
+Fix it by editing `index.js`:
 
 ```diff
 +const process = {
@@ -219,7 +180,7 @@ export const field = {
 
 ```
 
-And commit again and it will work:
+Commit again, it will work.
 
 ![alt text](images/image-4.png)
 

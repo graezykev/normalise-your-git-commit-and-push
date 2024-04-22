@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "prepare": "husky",
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "exit 0"
   },
   "author": "",
   "license": "ISC",
