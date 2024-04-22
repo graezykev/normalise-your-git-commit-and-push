@@ -1,8 +1,16 @@
-# Steps
+## Introduction
 
-## Init your project
+Catch a glimpse of what I'm going to do in this post.
 
-### Init npm
+<https://www.mermaidchart.com/app/projects/8ce67b87-532b-4cc1-ac6b-b699b102c0de/diagrams/f4d8ba46-56ff-42a7-8637-73f29036db28/version/v0.1/edit>
+
+### GitHub Repo
+
+If you prefer to run the demo I've written rather than following the steps one by one, check out this [GitHub repository](https://github.com/graezykev/normalise-your-git-commit-and-push) to get a quick overview.
+
+## Init your Project
+
+### Init NPM
 
 ```sh
 mkdir normalise-your-git-commit-and-push && \
@@ -11,7 +19,9 @@ npm init -y && \
 npm pkg set type="module"
 ```
 
-### Init Git repo (if you haven't)
+### Init Git Repo (if you haven't)
+
+### Init Git Repo (if you haven't)
 
 ```sh
 git init && \
@@ -46,7 +56,9 @@ what does it mainly do?
 
 - create `.gitignore` in `.husky/_`
 
-### Try it out
+### Try It Out
+
+### Try It Out
 
 ```sh
 git add .
@@ -91,7 +103,9 @@ Changing it to `exit 0` will ensure the commit works.
 
 ## Code Linting Setting
 
-### install & init linting tool
+### Install & Init Linting Tools
+
+### Install & Init Linting Tools
 
 ```sh
 npm install -D eslint@9 @eslint/js@9
@@ -109,14 +123,18 @@ export default [
 ];
 ```
 
-### add the linting script to `package.json`
+### Add Linting Script to `package.json`
+
+### Add Linting Script to `package.json`
 
 ```json
 "scripts": {
     "lint": "eslint ."
 ```
 
-### create a demo `index.js` file
+### Create a Demo `index.js`
+
+### Create a Demo `index.js`
 
 ```js
 export const field = {
@@ -124,7 +142,9 @@ export const field = {
 }
 ```
 
-### try to lint it
+### Lint the Demo
+
+### Lint the Demo
 
 ```sh
 npm run lint
@@ -148,9 +168,13 @@ This will cause some errors:
 
 ![alt text](images/image-1.png)
 
-## Add linting to Git (Commit) Hook
+## Add Linting to Git Commit Hook
 
-### put lint command to your Git hook
+## Add Linting to Git Commit Hook
+
+### Put Linting Command to Git Commit hook
+
+### Put Linting Command to Git Commit hook
 
 Add `npm run lint` to the first line of `.husky/pre-commit`
 
@@ -165,8 +189,9 @@ sed -i '1i npm run lint' .husky/pre-commit
 npm test
 ```
 
+### Try to Commit
 
-### try committing
+### Try to Commit
 
 ```sh
 git add .
@@ -195,7 +220,9 @@ husky - pre-commit script failed (code 1)
 
 you'll fail because you have to fix all the linting errors before committing the code.
 
-### Fix the linting errors
+### Fix the Linting Errors
+
+### Fix the Linting Errors
 
 fix it by editing your `index.js`:
 
@@ -222,19 +249,25 @@ And commit again and it will work:
 
 ## Commit Message Format
 
-### Install commit message linting tools
+### Install Commit Message Linting tools
+
+### Install Commit Message Linting tools
 
 ```sh
 npm install --save-dev @commitlint/{cli,config-conventional}
 ```
 
-### Configure commit message linting tools
+### Configure Commit Message Linting Tools
+
+### Configure Commit Message Linting Tools
 
 ```sh
 echo "export default { extends: ['@commitlint/config-conventional'] };" > commitlint.config.js
 ```
 
-### Test commit message linting tools
+### Test Commit Message Linting Tools
+
+### Test Commit Message Linting Tools
 
 ```sh
 npx commitlint --from HEAD~1 --to HEAD --verbose
@@ -244,7 +277,9 @@ You will encounter this error:
 
 ![alt text](images/image-5.png)
 
-### Why you fail?
+### Why Dose It Fail?
+
+### Why Dose It Fail?
 
 The **test** above is mimicing a commit command of `git commit -m 'commit'`.
 
@@ -264,9 +299,13 @@ i.e. your commit message must be at least like `"feat: your commit description .
 
 Your message of `"commit"` couldn't satisfy the rule, means you commit will fail.
 
-## Add Commit Message Format Rules to Git (Commit) Hook
+## Add Commit Message Format Rules to Git (Commit Message) Hook
 
-### add linting script to a hook
+## Add Commit Message Format Rules to Git (Commit Message) Hook
+
+### Add Linting Script to the Hook
+
+### Add Linting Script to the Hook
 
 ```sh
 echo "npx --no -- commitlint --edit \$1" > .husky/commit-msg
@@ -280,7 +319,9 @@ You'll see a new created file `.husky/commit-msg` with the content below:
 +npx --no -- commitlint --edit \$1
 ```
 
-### Test the hook
+### Test the Hook
+
+### Test the Hook
 
 ```sh
 git add .
@@ -304,7 +345,9 @@ git commit -m "chore: this is a legal commit message"
 
 ![alt text](images/image-9.png)
 
-## Tailor your commit message format
+## Tailor your Commit Message Format
+
+## Tailor your Commit Message Format
 
 The [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0/#summary) may not fulfill your team's requirement.
 
