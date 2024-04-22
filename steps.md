@@ -21,8 +21,6 @@ npm pkg set type="module"
 
 ### Init Git Repo (if you haven't)
 
-### Init Git Repo (if you haven't)
-
 ```sh
 git init && \
 echo 'node_modules' >> .gitignore
@@ -55,8 +53,6 @@ what does it mainly do?
 > `husky` is in some way included within `husky init`.
 
 - create `.gitignore` in `.husky/_`
-
-### Try It Out
 
 ### Try It Out
 
@@ -105,8 +101,6 @@ Changing it to `exit 0` will ensure the commit works.
 
 ### Install & Init Linting Tools
 
-### Install & Init Linting Tools
-
 ```sh
 npm install -D eslint@9 @eslint/js@9
 ```
@@ -125,14 +119,10 @@ export default [
 
 ### Add Linting Script to `package.json`
 
-### Add Linting Script to `package.json`
-
 ```json
 "scripts": {
     "lint": "eslint ."
 ```
-
-### Create a Demo `index.js`
 
 ### Create a Demo `index.js`
 
@@ -141,8 +131,6 @@ export const field = {
     "b": process.evn.bit,
 }
 ```
-
-### Lint the Demo
 
 ### Lint the Demo
 
@@ -170,10 +158,6 @@ This will cause some errors:
 
 ## Add Linting to Git Commit Hook
 
-## Add Linting to Git Commit Hook
-
-### Put Linting Command to Git Commit hook
-
 ### Put Linting Command to Git Commit hook
 
 Add `npm run lint` to the first line of `.husky/pre-commit`
@@ -188,8 +172,6 @@ sed -i '1i npm run lint' .husky/pre-commit
 + npm run lint
 npm test
 ```
-
-### Try to Commit
 
 ### Try to Commit
 
@@ -222,8 +204,6 @@ you'll fail because you have to fix all the linting errors before committing the
 
 ### Fix the Linting Errors
 
-### Fix the Linting Errors
-
 fix it by editing your `index.js`:
 
 ```diff
@@ -251,21 +231,15 @@ And commit again and it will work:
 
 ### Install Commit Message Linting tools
 
-### Install Commit Message Linting tools
-
 ```sh
 npm install --save-dev @commitlint/{cli,config-conventional}
 ```
 
 ### Configure Commit Message Linting Tools
 
-### Configure Commit Message Linting Tools
-
 ```sh
 echo "export default { extends: ['@commitlint/config-conventional'] };" > commitlint.config.js
 ```
-
-### Test Commit Message Linting Tools
 
 ### Test Commit Message Linting Tools
 
@@ -276,8 +250,6 @@ npx commitlint --from HEAD~1 --to HEAD --verbose
 You will encounter this error:
 
 ![alt text](images/image-5.png)
-
-### Why Dose It Fail?
 
 ### Why Dose It Fail?
 
@@ -301,10 +273,6 @@ Your message of `"commit"` couldn't satisfy the rule, means you commit will fail
 
 ## Add Commit Message Format Rules to Git (Commit Message) Hook
 
-## Add Commit Message Format Rules to Git (Commit Message) Hook
-
-### Add Linting Script to the Hook
-
 ### Add Linting Script to the Hook
 
 ```sh
@@ -318,8 +286,6 @@ You'll see a new created file `.husky/commit-msg` with the content below:
 ```diff
 +npx --no -- commitlint --edit \$1
 ```
-
-### Test the Hook
 
 ### Test the Hook
 
@@ -344,8 +310,6 @@ git commit -m "chore: this is a legal commit message"
 ```
 
 ![alt text](images/image-9.png)
-
-## Tailor your Commit Message Format
 
 ## Tailor your Commit Message Format
 
