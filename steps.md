@@ -510,6 +510,10 @@ Bypass the check script again.
 git commit -am 'bypass eslint again to commit' --no-verify
 ```
 
+Now, we have 2 commits including `index.js` and `eslint.config.js`, in which there're ESLint issues, but they are committed by tricks (`--no-verify`).
+
+But don't panic, because they won't be able to be pushed because they will face the punishment of the **Git Push Hook** we made above!
+
 ### Force `test` before push
 
 Let's modify our team's workflows.
