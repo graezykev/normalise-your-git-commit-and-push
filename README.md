@@ -22,7 +22,7 @@ Commit it:
 git commit -am 'test commit'
 ```
 
-If you fail, force commit it:
+If it fails, force the commit:
 
 ```sh
 git commit -am 'test commit' --no-verify
