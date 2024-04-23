@@ -6,6 +6,7 @@
   "scripts": {
     "prepare": "husky",
     "lint": "eslint .",
+    "lint:staged": "lint-staged",
     "test": "exit 0"
   },
   "author": "",
@@ -16,6 +17,7 @@
     "@commitlint/config-conventional": "^19.1.0",
     "@eslint/js": "^9.0.0",
     "eslint": "^9.0.0",
-    "husky": "^9.0.11"
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2"
   }
 }

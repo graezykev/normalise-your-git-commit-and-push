@@ -75,7 +75,7 @@ This is because we have an `exit 1` in `package.json`.
   "test": "echo \"Error: no test specified\" && exit 1",
 ```
 
-Changing it to `exit 0` will ensure the commit works.
+Changing it to `exit 0` will make the commit works.
 
 ```diff
 "scripts": {
@@ -91,7 +91,7 @@ Changing it to `exit 0` will ensure the commit works.
 
 For now, we only have a `test` command in our **pre commit** hook, next, we're going to supplement it with a **Linting** command, to check the **Code Style** before you commit JS code.
 
-### Install & Init Linting Tools
+### Install & Configure Linting Tools
 
 ```sh
 npm install -D eslint@9 @eslint/js@9
@@ -114,7 +114,7 @@ export default [
 +  "lint": "eslint .",
 ```
 
-### Create a Demo `index.js` with the code
+### Create a Demo `index.js`
 
 ```js
 export const field = {
@@ -128,7 +128,7 @@ export const field = {
 npm run lint
 ```
 
-This will cause some errors, because we haven't defined the variable `process` in the Demo code, which is not allowed in the ESLint rule.
+This will produce some errors, because we haven't defined the variable `process` in the Demo code, which is not allowed in the ESLint rule.
 
 ![alt text](images/image-1.png)
 
@@ -138,18 +138,20 @@ This will cause some errors, because we haven't defined the variable `process` i
 
 Add `npm run lint` to the first line of `.husky/pre-commit`
 
-```sh
-sed -i '1i npm run lint' .husky/pre-commit
-```
-
-`.husky/pre-commit`:
-
 ```diff
 + npm run lint
 npm test
 ```
 
+You can edit it directly, or do it by the command below.
+
+```sh
+sed -i '1i npm run lint' .husky/pre-commit
+```
+
 ### Try to Commit
+
+Now all commits will trigger the run of this linting command.
 
 ```sh
 git add .
@@ -165,7 +167,7 @@ You'll fail because you have to fix all the linting errors (we mentioned above) 
 
 ### Fix the Linting Errors
 
-Fix it by editing `index.js`:
+Fix it by editing `index.js`.
 
 ```diff
 +const process = {
@@ -184,9 +186,63 @@ Commit again, it will work.
 
 ![alt text](images/image-4.png)
 
-> Notice: **both `npm run lint` and `npm test` in `pre-commit` need to pass before you can commit**
+By now, **both `npm run lint` and `npm test` in `pre-commit` need to pass before you can commit**.
 
-> Notice: This way of linting is insufficient in a production project; for improved linting, please refer to my other post.
+### Better Linting
+
+This way of linting is insufficient in a production project, to integrate a robust linting tool chain, I think you need to checkout another post of mine [Configure ESLint in a TypeScript project to adhere to Standard JS](https://github.com/graezykev/ts-eslint-standard-js)
+
+## lint-staged
+
+### Install lint-staged
+
+```sh
+npm install -D lint-staged
+```
+
+### Configure lint-staged
+
+Create a `lint-staged.config.js` with the configuration below.
+
+```js
+export default {
+  // you can lint other kind of files with other tools
+  "*.{js,jsx,ts,tsx}": [
+    // you can also add other tools to lint you JS here
+    "eslint"
+  ]
+}
+
+var b // I put this line to elicit an error output in ESLint on purpose
+```
+
+### Add lint-staged command to NPM script
+
+```diff
+  "lint": "eslint .",
++  "lint:staged": "lint-staged",
+```
+
+And of course modify your hook command with it in `.husky/pre-commit`.
+
+```diff
+-npm run lint
++npm run lint:staged
+```
+
+### Use lint-staged
+
+```sh
+git add lint-staged.config.js
+```
+
+```sh
+git commit -m 'test lint-staged'
+```
+
+This time, only the **new added** file `lint-staged.config.js` is checked in you commit. You dont need to fix all you JS file in the project, nor even all the JS files you have modified, but just the **staged** file(s) you really want to commit.
+
+![alt text](images/image-00.png)
 
 ## Commit Message Format
 
@@ -207,6 +263,8 @@ echo "export default { extends: ['@commitlint/config-conventional'] };" > commit
 ```sh
 npx commitlint --from HEAD~1 --to HEAD --verbose
 ```
+
+> "From HEAD~1 to HEAD" is you latest commit
 
 You will encounter this error:
 
