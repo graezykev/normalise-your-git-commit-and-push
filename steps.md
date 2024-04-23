@@ -8,6 +8,22 @@ Catch a glimpse of what I'm going to do in this post.
 
 If you prefer to run the demo I've written rather than following the steps one by one, check out this [GitHub repository](https://github.com/graezykev/normalise-your-git-commit-and-push) to get a quick overview.
 
+## Key Takeaways
+
+- 1. Init your Project
+- 2. Git Commit Hook
+- 3. Simple Code Linting
+- 4. Add Linting to Git Commit Hook
+- 5. lint-staged
+- 6. Commit Message Hook
+- 7. Add Commit Message Format Rules to Commit Message Hook
+- 8. Tailor your Commit Message Format
+- 9. Git Push Hook
+  - 9.1 Incremental Push Code Linting
+  - 9.2 Test the Incremental Linting
+  - 9.3 Force test before push
+- 10. DIY your workflows
+
 ## 1. Init your Project (if you haven't)
 
 ### Init NPM
@@ -26,7 +42,7 @@ git init && \
 echo 'node_modules' >> .gitignore
 ```
 
-## Git Hook Setting
+## 2. Git Commit Hook
 
 ### Install Git Hook Tools
 
@@ -87,7 +103,7 @@ Changing it to `exit 0` will make the commit works.
 
 > **In a real production codebase, you should specify your real `test` command, like Jest, Playwright, etc.**
 
-## Simple Code Linting Setting
+## 3. Simple Code Linting
 
 For now, we only have a `test` command in our **pre commit** hook, next, we're going to supplement it with a **Linting** command, to check the **Code Style** before you commit JS code.
 
@@ -132,7 +148,7 @@ This will produce some errors, because we haven't defined the variable `process`
 
 ![alt text](images/image-1.png)
 
-## Add Linting to Git Commit Hook
+## 4. Add Linting to Git Commit Hook
 
 ### Put Linting Command to Git Commit hook
 
@@ -192,7 +208,7 @@ By now, **both `npm run lint` and `npm test` in `pre-commit` need to pass before
 
 This way of linting is insufficient in a production project, to integrate a robust linting tool chain, I think you need to checkout another post of mine [Configure ESLint in a TypeScript project to adhere to Standard JS](https://github.com/graezykev/ts-eslint-standard-js)
 
-## lint-staged
+## 5. lint-staged
 
 ### Install lint-staged
 
@@ -248,7 +264,7 @@ This time, only the **new added** file `lint-staged.config.js` is checked in you
 
 There're more linting tools I won't go too deep but you can integrate with `lint-staged`, such as, lint your css contents by [Stylelint](https://stylelint.io/), or event lint your README files by [markdownlint](https://github.com/DavidAnson/markdownlint), etc.
 
-## Commit Message Format
+## 6. Commit Message Hook
 
 ### Install Commit Message Linting tools
 
@@ -292,7 +308,7 @@ i.e. your commit message must be at least like `"feat: your commit description .
 
 Your message of `"commit"` couldn't satisfy the rule, means you commit will fail.
 
-## Add Commit Message Format Rules to Git (Commit Message) Hook
+## 7. Add Commit Message Format Rules to Commit Message Hook
 
 ### Add Linting Script to the Hook
 
@@ -332,7 +348,7 @@ git commit -m "chore: this is a legal commit message"
 
 ![alt text](images/image-9.png)
 
-## Tailor your Commit Message Format
+## 8. Tailor your Commit Message Format
 
 The [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0/#summary) may not fulfill your team's requirement.
 
@@ -390,11 +406,11 @@ Gotcha!
 
 ![alt text](images/image-11.png)
 
-## Git Push Hook
+## 9. Git Push Hook
 
 A **Git Push Hook** is the hook which is trigger before push. You can use Git Push Hook as another **fire-wall** to validate the code before they are pushed to the remote repository.
 
-### Lint your Code Again before Pushing
+### 9.1 Incremental Push Code Linting
 
 Although we have run `npm run lint:staged` in `pre-commit`, does it ensure that there will be no unchecked code committed?
 
@@ -476,7 +492,7 @@ echo "npm run lint:incremental-push" > .husky/pre-push
 
 Now this shell script will run every time before your push, no **forced committed** code can pass!
 
-#### Test the incremental check
+### 9.2 Test the Incremental Linting
 
 Open `index.js` to add a simple line.
 
@@ -524,7 +540,7 @@ All **incremental errors** will be caught!
 
 ![alt text](images/image-02.png)
 
-### Force `test` before push
+### 9.3 Force `test` before push
 
 Let's modify our team's workflows.
 
@@ -565,7 +581,7 @@ git push origin main
 
 Revert `exit 1` to `exit 0`, or use your **real test scripts** that can pass, your code push to the remote repository will success!
 
-## DIY
+## 10. DIY your Workflows
 
 you should DIY your Git commit/push hooks to tailor your team's workflow, like
 
@@ -575,3 +591,5 @@ you should DIY your Git commit/push hooks to tailor your team's workflow, like
 - both lint & test in commits and pushes
 - add other commands or scripts to your Git commit/push hooks, for example, push an IM message, or send an Email, to notify your teammates of your changes.
 - use your imagination to do whatever you want ...
+
+## Conclusion
