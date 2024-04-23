@@ -244,6 +244,10 @@ This time, only the **new added** file `lint-staged.config.js` is checked in you
 
 ![alt text](images/image-00.png)
 
+### lint-staged other files
+
+There're more linting tools I won't go too deep but you can integrate with `lint-staged`, such as, lint your css contents by [Stylelint](https://stylelint.io/), or event lint your README files by [markdownlint](https://github.com/DavidAnson/markdownlint), etc.
+
 ## Commit Message Format
 
 ### Install Commit Message Linting tools
