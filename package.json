@@ -7,6 +7,7 @@
     "prepare": "husky",
     "lint": "eslint .",
     "lint:staged": "lint-staged",
+    "lint:incremental-push": "./scripts/lint-incremental-push-files.sh",
     "test": "exit 0"
   },
   "author": "",

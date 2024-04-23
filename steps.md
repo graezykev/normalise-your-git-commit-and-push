@@ -409,9 +409,9 @@ See the `--no-verify` flag? This causes a **forced commit** which is a hidden ti
 
 We need the second defense line before those **forced committed** code are pushed to our remote repository and contaminate the codebase.
 
-Create a file named `.husky/lint-incremental-push-files.sh` with the code below.
+Create a shell script file named `scripts/lint-incremental-push-files.sh` with the code below.
 
-In this shell script, we'll find out those **incremental** JS/TS files we want to push, and run ESLint command only on them.
+In this shell script, we'll find out those **incremental** JS/TS files we want to **push**, and run ESLint command only on them.
 
 ```sh
 #!/bin/bash
@@ -453,13 +453,25 @@ fi
 Make the script executable:
 
 ```sh
-chmod +x .husky/lint-incremental-push-files.sh
+chmod +x scripts/lint-incremental-push-files.sh
 ```
 
-Create the **Git Push Hook** named `.husky/pre-push`, and add the running of the script to it.
+Add this script to a NPM script in `package.json`.
+
+```diff
+  "scripts": {
+    "prepare": "husky",
+    "lint": "eslint .",
+    "lint:staged": "lint-staged",
++    "lint:incremental-push": "./scripts/lint-incremental-push-files.sh",
+    "test": "exit 0"
+  },
+```
+
+Create the **Git Push Hook** named `.husky/pre-push`, and add the NPM script to it.
 
 ```sh
-echo "./lint-incremental-push-files.sh" > .husky/pre-push
+echo "npm run lint:incremental-push" > .husky/pre-push
 ```
 
 Now this shell script will run every time before your push, no **forced committed** code can pass!

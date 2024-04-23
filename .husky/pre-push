@@ -1,2 +1,2 @@
-.husky/lint-incremental-push-files.sh
+npm run lint:incremental-push
 npm test
