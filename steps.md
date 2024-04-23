@@ -402,10 +402,10 @@ No, because you can still do this:
 
 ```sh
 git add . && \
-git commit -m 'whatever I like' --force
+git commit -m 'whatever I like' --no-verify
 ```
 
-See the `--force` flag? That's a hidden time bomb!
+See the `--no-verify` flag? This causes a **forced commit** which is a hidden time bomb!
 
 We need the second defense line before those **forced committed** code are pushed to our remote repository and contaminate the codebase.
 
