@@ -476,6 +476,28 @@ echo "npm run lint:incremental-push" > .husky/pre-push
 
 Now this shell script will run every time before your push, no **forced committed** code can pass!
 
+Let's test it.
+
+Open `index.js` to add a simple line.
+
+```diff
+var a
+```
+
+You can not commit it because we have a `pre-commit` hook to lint the file.
+
+```sh
+git commit -am 'bypass eslint to commit'
+```
+
+![alt text](image.png)
+
+But you can bypass the check with `--no-verify`
+
+```sh
+git commit -am 'bypass eslint to commit' --no-verify
+```
+
 ### Force `test` before push
 
 Let's modify our team's workflows.
@@ -493,10 +515,10 @@ npm run lint:staged
 - npm test
 ```
 
-And create the **Git Push Hook** with the test command.
+And put this `test` command to the **Git Push Hook**.
 
 ```sh
-echo "npm test" > .husky/pre-push
+echo "npm test" >> .husky/pre-push
 ```
 
 Let's edit the `package.json`'s `test` command to force the test to fail.
@@ -507,7 +529,7 @@ Let's edit the `package.json`'s `test` command to force the test to fail.
 +  "test": "exit 1",
 ```
 
-Now if you try to push the code (of course you need to commit it first) you'll fail because we have a `exit 1` in the command.
+Now if you try to push whatever code you'll fail because we have a `exit 1` in the command.
 
 ```sh
 git push origin main

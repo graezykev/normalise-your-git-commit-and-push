@@ -7,3 +7,5 @@ const process = {
 export const field = {
     "b": process.evn.bit,
 }
+
+var a
