@@ -24,6 +24,8 @@ If you prefer to run the demo I've written rather than following the steps one b
 12. [Force test before push](#12-force-test-before-push)
 13. [DIY your workflows](#13-diy-your-workflows)
 
+And don't be afraid, every step is concise and simple.
+
 ## 1. Init your Project (if you haven't)
 
 ### Init NPM
@@ -123,6 +125,8 @@ export default [
 ];
 ```
 
+> Note: I use `export default xxx` here because my `package.json` includes the configuration `"type": "module"`. If you don't have this configuration, use `module.exports = xxx` instead.
+
 ### Add Linting Script to `package.json`
 
 ```diff
@@ -206,9 +210,29 @@ By now, **both `npm run lint` and `npm test` in `pre-commit` need to pass before
 
 ### Better Linting
 
-This way of linting is insufficient in a production project, to integrate a robust linting tool chain, I think you need to checkout another post of mine [Configure ESLint in a TypeScript project to adhere to Standard JS](https://github.com/graezykev/ts-eslint-standard-js)
+This way of linting is insufficient in a production project, to integrate a robust linting tool chain, you can checkout another post of mine to learn: [Configure ESLint in a TypeScript project to adhere to Standard JS](https://github.com/graezykev/ts-eslint-standard-js).
 
 ## 5. lint-staged
+
+Have you notice the problem of `npm run lint` in `pre-commit`?
+
+Yes, **all your JS files in the project** are checked in this process, what is the problem though?
+
+Say, you're working on a historical project with hundreds of JS files, and it never integrate linting tools and Git commit hooks before, i.e. there may be numerous code style issues in those existing code.
+
+Today you integrate this linting tools and Git commit hooks, and tomorrow your teammate edit merely one JS file, but he can't commit it because he will be facing all the linting issues at a time which thrown out by `npm run lint`.
+
+Let me give another example. You spent a day working on developing a web page and you've written some `header.js`, `aside.js`, `main.js`, `footer.js` ... But, only the `header.js` is finished, the others are still under developing.
+
+Now it's 5 o'clock, time to call it a day! You decide to commit `header.js` first, but you encounter the similar obstacles as the former example.
+
+What we need is a way of commiting some **"incremental code"**, or more correctly elaborate by the Git terminology **staged** files.
+
+In simple terms, **staged** files are those files you've add to the **[Git Staging Area](https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F#_the_three_states)** by `git add <filename>`.
+
+And only those code in staging area should be linted in each commit.
+
+Now let's make it done.
 
 ### Install lint-staged
 
@@ -218,7 +242,7 @@ npm install -D lint-staged
 
 ### Configure lint-staged
 
-Create a `lint-staged.config.js` with the configuration below.
+Create a `lint-staged.config.js` in the project root with the configuration below.
 
 ```js
 export default {
@@ -231,6 +255,8 @@ export default {
 
 var b // I put this line to elicit an error output in ESLint on purpose
 ```
+
+> Note: I use `export default xxx` here because my `package.json` includes the configuration `"type": "module"`. If you don't have this configuration, use `module.exports = xxx` instead.
 
 ### Add lint-staged command to NPM script
 
@@ -256,7 +282,7 @@ git add lint-staged.config.js
 git commit -m 'test lint-staged'
 ```
 
-This time, only the **new added** file `lint-staged.config.js` is checked in you commit. You dont need to fix all you JS file in the project, nor even all the JS files you have modified, but just the **staged** file(s) you really want to commit.
+This time, only the **new added (staged)** file `lint-staged.config.js` is checked in you commit. You dont need to fix all you JS file in the project, nor even all the JS files you have modified, but just the **staged** file(s) you really want to commit.
 
 ![alt text](images/image-00.png)
 
@@ -277,6 +303,8 @@ npm install --save-dev @commitlint/{cli,config-conventional}
 ```sh
 echo "export default { extends: ['@commitlint/config-conventional'] };" > commitlint.config.js
 ```
+
+> Note: I use `export default xxx` here because my `package.json` includes the configuration `"type": "module"`. If you don't have this configuration, use `module.exports = xxx` instead.
 
 ### Test Commit Message Linting Tools
 
@@ -385,6 +413,8 @@ export default {
   }
 }
 ```
+
+> Note: I use `export default xxx` here because my `package.json` includes the configuration `"type": "module"`. If you don't have this configuration, use `module.exports = xxx` instead.
 
 Now test it.
 
