@@ -109,7 +109,7 @@ What does it mainly do?
 
 - create `.husky/_/husky.sh`, `.husky/_/h` etc.
 
-- create a `.husky/pre-commit` hook
+- create a `.husky/pre-commit` wit the script `npm test`
 
 - create a `prepare` script in `package.json` with the command `husky`
 
@@ -129,7 +129,7 @@ git commit -m 'first commit'
 
 Here is what you'll see from the terminal console.
 
-![alt text](images/image.png)
+![alt text](image.png)
 
 This is because we have an `exit 1` in `package.json`.
 
@@ -146,9 +146,9 @@ Changing it to `exit 0` will make the commit work.
 +  "test": "exit 0",
 ```
 
-![alt text](images/image-13.png)
+![alt text](image-1.png)
 
-> **In a real production codebase, you should specify your real `test` command, like Jest, Playwright, etc.**
+> **In a real production project, you should specify your real `test` command, like Jest, Playwright, etc.**
 
 ## 3. Simple Code Linting
 
@@ -195,7 +195,7 @@ npm run lint
 
 This will produce some errors because we haven't defined the variable `process` in the Demo code, which is not allowed in the ESLint rule.
 
-![alt text](images/image-1.png)
+![alt text](image-3.png)
 
 ## 4. Add Linting to Git Commit Hook
 
@@ -206,12 +206,6 @@ Add `npm run lint` to the first line of `.husky/pre-commit`
 ```diff
 + npm run lint
 npm test
-```
-
-You can edit it directly, or do it by the command below.
-
-```sh
-sed -i '1i npm run lint' .husky/pre-commit
 ```
 
 ### Try to Commit
@@ -226,7 +220,7 @@ git add .
 git commit -m 'second commit'
 ```
 
-![alt text](images/image-3.png)
+![alt text](image-2.png)
 
 You'll fail because you have to fix all the linting errors (we mentioned above) before committing the code.
 
@@ -249,7 +243,12 @@ export const field = {
 
 Commit again, it will work.
 
-![alt text](images/image-4.png)
+```sh
+git add .
+git commit -m 'commit after fix index.js'
+```
+
+![alt text](image-4.png)
 
 By now, **both `npm run lint` and `npm test` in `pre-commit` need to pass before you can commit**.
 
@@ -307,7 +306,7 @@ var b // I put this line to elicit an error output in ESLint on purpose
 
 ```diff
   "lint": "eslint .",
-+  "lint:staged": "lint-staged",
++ "lint:staged": "lint-staged",
 ```
 
 And of course modify your hook command with it in `.husky/pre-commit`.
@@ -329,7 +328,9 @@ git commit -m 'test lint-staged'
 
 This time, only the **newly added (staged)** file `lint-staged.config.js` is checked in your commit. You don't need to fix all your JS files in the project, nor even all the JS files you have modified, but just the **staged** file(s) you really want to commit.
 
-![alt text](images/image-00.png)
+![alt text](image-5.png)
+
+Remove the line `var b` in it then the push will succeed.
 
 ### lint-staged other files
 
@@ -357,17 +358,17 @@ echo "export default { extends: ['@commitlint/config-conventional'] };" > commit
 npx commitlint --from HEAD~1 --to HEAD --verbose
 ```
 
-> "from HEAD~1 to HEAD" is your latest commit
+> "from HEAD~1 to HEAD" is your **latest commit**
 
 You will encounter this error:
 
-![alt text](images/image-5.png)
+![alt text](image-6.png)
 
 ### Why Dose It Fail?
 
-The test case above is mimicking a commit command of `git commit -m 'commit'`.
+The test case above is mimicking a commit command of `git commit -m 'commit after fix index.js'`.
 
-In this case your **commit message** is `"commit"`, but we have the **rule** of commit message **format** which is configured in `commitlint.config.js`, stipulating the commit message should be structured as [follows](https://www.conventionalcommits.org/en/v1.0.0/#summary):
+In this case your **commit message** is `"commit after fix index.js"`, but we have the **rule** of commit message **format** which is configured in `commitlint.config.js`, stipulating the commit message should be structured as [follows](https://www.conventionalcommits.org/en/v1.0.0/#summary):
 
 ```txt
 <type>[optional scope]: <description>
@@ -407,19 +408,29 @@ git add .
 git commit -m "this will fail"
 ```
 
-![alt text](images/image-7.png)
+It fails because no `type` nor `subject` is specified.
+
+![alt text](image-7.png)
+
+Make some slightly adjustment.
 
 ```sh
 git commit -m "foo: this will also fail"
 ```
 
-![alt text](images/image-8.png)
+Because `foo` is not a legitimate `type` so it fails again.
+
+![alt text](image-8.png)
+
+Change the message again.
 
 ```sh
 git commit -m "chore: this is a legal commit message"
 ```
 
-![alt text](images/image-9.png)
+Hooray!
+
+![alt text](image-9.png)
 
 ## 8. Tailor your Commit Message Format
 
@@ -464,12 +475,13 @@ export default {
 Now test it.
 
 ```sh
+git add .
 git commit -m 'chore: try to commit'
 ```
 
-Oops!
+Oops! The commit fails as we just add a new rule to force a "JIRA ticket ID" in the commit message's subject.
 
-![alt text](images/image-10.png)
+![alt text](image-10.png)
 
 Try another one:
 
@@ -479,7 +491,7 @@ git commit -m 'chore: [PRJ-1234] a commit with sample id'
 
 Gotcha!
 
-![alt text](images/image-11.png)
+![alt text](image-11.png)
 
 ## 9. Git Push Hook
 
@@ -489,16 +501,18 @@ A **Git Push Hook** is the hook which is triggered before the push. You can use 
 
 Although we have run `npm run lint:staged` in `pre-commit`, does it ensure that there will be no unchecked code committed?
 
-No, because you can still do this:
+No, because you can commit codes that haven't been fixed by this:
 
 ```sh
 git add . && \
 git commit -m 'whatever I like' --no-verify
 ```
 
-See the `--no-verify` flag? This causes a **forced commit** which is a hidden time bomb! You're even not able to stop your teammates from doing it sneakily!
+See the `--no-verify` flag? This causes a **forced commit**, what a hidden time bomb! You're even not able to stop your teammates from doing it sneakily!
 
-So, we need a second defence line before those **forced committed** codes are pushed to our remote repository and contaminate the codebase.
+So, here we need a second defence line before those **forced committed** codes are pushed to our remote repository and contaminate the codebase.
+
+### Create a Incremental Push Linting Shell Script
 
 Create a shell script file named `scripts/lint-incremental-push-files.sh` with the code below.
 
@@ -554,12 +568,12 @@ Add this script to a NPM script in `package.json`.
     "prepare": "husky",
     "lint": "eslint .",
     "lint:staged": "lint-staged",
-+    "lint:incremental-push": "./scripts/lint-incremental-push-files.sh",
++   "lint:incremental-push": "./scripts/lint-incremental-push-files.sh",
     "test": "exit 0"
   },
 ```
 
-Create the **Git Push Hook** named `.husky/pre-push`, and add the NPM script to it.
+Create the **Git Push Hook** configure file named `.husky/pre-push`, and add the NPM script to it.
 
 ```sh
 echo "npm run lint:incremental-push" > .husky/pre-push
@@ -568,6 +582,14 @@ echo "npm run lint:incremental-push" > .husky/pre-push
 Now this shell script will run every time before your push, no **forced committed** code can pass!
 
 ## 11. Test the Incremental Linting
+
+Before making any changes and test the incremental changes since last push, we need to push the code first.
+
+```sh
+git push origin main
+```
+
+Now, let's make some changes.
 
 Open `index.js` to add a simple line.
 
@@ -578,10 +600,11 @@ Open `index.js` to add a simple line.
 You can not commit it because we have a `pre-commit` hook to lint the file.
 
 ```sh
+git add .
 git commit -am 'bypass eslint to commit'
 ```
 
-![alt text](images/image-01.png)
+![alt text](image-12.png)
 
 But you can bypass the check with `--no-verify`
 
@@ -589,19 +612,26 @@ But you can bypass the check with `--no-verify`
 git commit -am 'bypass eslint to commit' --no-verify
 ```
 
+![alt text](image-13.png)
+
 Do a similar thing to `eslint.config.js` with a new line.
 
 ```diff
-+var b
++var b;
 ```
 
 Bypass the check script again.
 
 ```sh
+git add .
 git commit -am 'bypass eslint again to commit' --no-verify
 ```
 
-Now, we have 2 commits including `index.js` and `eslint.config.js`, in which there're ESLint issues, but they are committed by tricks (`--no-verify`).
+Just now, we have 2 commits including `index.js` and `eslint.config.js`, in which there're actually ESLint issues, but they are committed by tricks (`--no-verify`).
+
+The commit in the yellow rectangle are so call **Incremental Changes** to be pushed, but they should not be push!
+
+![alt text](image-14.png)
 
 But don't panic, because they won't be able to be pushed because they will face the punishment of the **Git Push Hook** we made above!
 
@@ -611,9 +641,9 @@ If you push the code.
 git push origin main
 ```
 
-All **incremental errors** will be caught!
+All **Incremental Errors** will be caught!
 
-![alt text](images/image-02.png)
+![alt text](image-15.png)
 
 ## 12. Force `test` before push
 

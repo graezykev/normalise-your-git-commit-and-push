@@ -4,4 +4,4 @@ export default [
   pluginJs.configs.recommended
 ];
 
-var b
+var b;
