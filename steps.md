@@ -405,9 +405,9 @@ git add . && \
 git commit -m 'whatever I like' --no-verify
 ```
 
-See the `--no-verify` flag? This causes a **forced commit** which is a hidden time bomb!
+See the `--no-verify` flag? This causes a **forced commit** which is a hidden time bomb! You're even not able to stop your teammates to do it sneakily!
 
-We need the second defense line before those **forced committed** code are pushed to our remote repository and contaminate the codebase.
+So, we need a second defense line before those **forced committed** code are pushed to our remote repository and contaminate the codebase.
 
 Create a shell script file named `scripts/lint-incremental-push-files.sh` with the code below.
 
@@ -476,12 +476,12 @@ echo "npm run lint:incremental-push" > .husky/pre-push
 
 Now this shell script will run every time before your push, no **forced committed** code can pass!
 
-Let's test it.
+#### Test the incremental check
 
 Open `index.js` to add a simple line.
 
 ```diff
-var a
++var a
 ```
 
 You can not commit it because we have a `pre-commit` hook to lint the file.
@@ -496,6 +496,18 @@ But you can bypass the check with `--no-verify`
 
 ```sh
 git commit -am 'bypass eslint to commit' --no-verify
+```
+
+Do the similar thing to `eslint.config.js` with a new line.
+
+```diff
++var b
+```
+
+Bypass the check script again.
+
+```sh
+git commit -am 'bypass eslint again to commit' --no-verify
 ```
 
 ### Force `test` before push
