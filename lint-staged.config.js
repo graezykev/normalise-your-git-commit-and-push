@@ -6,4 +6,4 @@ export default {
   ]
 }
 
-// var b // I put this line to elicit an error output in ESLint on purpose
+var b // I put this line to elicit an error output in ESLint on purpose
