@@ -490,7 +490,7 @@ You can not commit it because we have a `pre-commit` hook to lint the file.
 git commit -am 'bypass eslint to commit'
 ```
 
-![alt text](image.png)
+![alt text](images/image-01.png)
 
 But you can bypass the check with `--no-verify`
 
@@ -513,6 +513,16 @@ git commit -am 'bypass eslint again to commit' --no-verify
 Now, we have 2 commits including `index.js` and `eslint.config.js`, in which there're ESLint issues, but they are committed by tricks (`--no-verify`).
 
 But don't panic, because they won't be able to be pushed because they will face the punishment of the **Git Push Hook** we made above!
+
+If you push the code.
+
+```sh
+git push origin main
+```
+
+All **incremental errors** will be caught!
+
+![alt text](images/image-02.png)
 
 ### Force `test` before push
 
