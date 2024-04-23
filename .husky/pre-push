@@ -1,2 +1,2 @@
-./lint-incremental-push-files.sh
+.husky/lint-incremental-push-files.sh
 npm test
