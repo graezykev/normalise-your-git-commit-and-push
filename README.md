@@ -1,6 +1,6 @@
 # Normalise Your Git Commit and Push Processes
 
-**Using `husky`, NPM linting scripts, `lint-stage` and `commitlint`.**
+**Using `husky`, `eslint`, `lint-stage`, `commitlint` and straightforward Shell scripts.**
 
 See the [Steps](./steps.md)
 
