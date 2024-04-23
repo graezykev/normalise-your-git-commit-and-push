@@ -410,7 +410,7 @@ Gotcha!
 
 A **Git Push Hook** is the hook which is trigger before push. You can use Git Push Hook as another **fire-wall** to validate the code before they are pushed to the remote repository.
 
-## 10 Incremental Push Code Linting
+## 10. Incremental Push Code Linting
 
 Although we have run `npm run lint:staged` in `pre-commit`, does it ensure that there will be no unchecked code committed?
 
