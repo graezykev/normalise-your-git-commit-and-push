@@ -10,21 +10,19 @@ If you prefer to run the demo I've written rather than following the steps one b
 
 ## Key Takeaways
 
-1. Init your Project
-2. Git Commit Hook
-3. Simple Code Linting
-4. Add Linting to Git Commit Hook
-5. lint-staged
-6. Commit Message Hook
-7. Add Commit Message Format Rules to Commit Message Hook
-8. Tailor your Commit Message Format
-9. Git Push Hook
-
-- 9.1 Incremental Push Code Linting
-- 9.2 Test the Incremental Linting
-- 9.3 Force test before push
-
-10. DIY your workflows
+1. [Init your Project](#1-init-your-project-if-you-havent)
+2. [Git Commit Hook](#2-git-commit-hook)
+3. [Simple Code Linting](#3-simple-code-linting)
+4. [Add Linting to Git Commit Hook](#4-add-linting-to-git-commit-hook)
+5. [lint-staged](#5-lint-staged)
+6. [Commit Message Hook](#6-commit-message-hook)
+7. [Add Commit Message Format Rules to Commit Message Hook](#7-add-commit-message-format-rules-to-commit-message-hook)
+8. [Tailor your Commit Message Format](#8-tailor-your-commit-message-format)
+9. [Git Push Hook](#9-git-push-hook)
+10. [Incremental Push Code Linting](#10-incremental-push-code-linting)
+11. [Test the Incremental Linting](#11-test-the-incremental-linting)
+12. [Force test before push](#12-force-test-before-push)
+13. [DIY your workflows](#13-diy-your-workflows)
 
 ## 1. Init your Project (if you haven't)
 
@@ -412,7 +410,7 @@ Gotcha!
 
 A **Git Push Hook** is the hook which is trigger before push. You can use Git Push Hook as another **fire-wall** to validate the code before they are pushed to the remote repository.
 
-### 9.1 Incremental Push Code Linting
+## 10 Incremental Push Code Linting
 
 Although we have run `npm run lint:staged` in `pre-commit`, does it ensure that there will be no unchecked code committed?
 
@@ -494,7 +492,7 @@ echo "npm run lint:incremental-push" > .husky/pre-push
 
 Now this shell script will run every time before your push, no **forced committed** code can pass!
 
-### 9.2 Test the Incremental Linting
+## 11. Test the Incremental Linting
 
 Open `index.js` to add a simple line.
 
@@ -542,7 +540,7 @@ All **incremental errors** will be caught!
 
 ![alt text](images/image-02.png)
 
-### 9.3 Force `test` before push
+## 12. Force `test` before push
 
 Let's modify our team's workflows.
 
@@ -583,7 +581,7 @@ git push origin main
 
 Revert `exit 1` to `exit 0`, or use your **real test scripts** that can pass, your code push to the remote repository will success!
 
-## 10. DIY your Workflows
+## 13. DIY your Workflows
 
 you should DIY your Git commit/push hooks to tailor your team's workflow, like
 
