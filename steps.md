@@ -268,7 +268,7 @@ echo "export default { extends: ['@commitlint/config-conventional'] };" > commit
 npx commitlint --from HEAD~1 --to HEAD --verbose
 ```
 
-> "From HEAD~1 to HEAD" is you latest commit
+> "from HEAD~1 to HEAD" is you latest commit
 
 You will encounter this error:
 
@@ -276,11 +276,9 @@ You will encounter this error:
 
 ### Why Dose It Fail?
 
-The **test** above is mimicing a commit command of `git commit -m 'commit'`.
+The test case above is mimicing a commit command of `git commit -m 'commit'`.
 
-In this case your **commit message** is `"commit"`,
-
-But we have the **rule** of commit message **format** which is configured in `commitlint.config.js`, stipulating the commit message should be structured as [follows](https://www.conventionalcommits.org/en/v1.0.0/#summary):
+In this case your **commit message** is `"commit"`, but we have the **rule** of commit message **format** which is configured in `commitlint.config.js`, stipulating the commit message should be structured as [follows](https://www.conventionalcommits.org/en/v1.0.0/#summary):
 
 ```txt
 <type>[optional scope]: <description>
@@ -392,33 +390,109 @@ Gotcha!
 
 ![alt text](images/image-11.png)
 
-## Add Git (Push) Hook
+## Git Push Hook
 
-Let's modify our team's workflows to allow only **linted** code **commits** without **test** verification. However, we will permit code **pushes** only if they have already passed the **test** command. Therefore, we will move the `npm test` command from the `pre-commit` hook to a **Git push hook** named `pre-push`.
+A **Git Push Hook** is the hook which is trigger before push. You can use Git Push Hook as another **fire-wall** to validate the code before they are pushed to the remote repository.
 
-`./husky/pre-commit`:
+### Lint your Code Again before Pushing
+
+Although we have run `npm run lint:staged` in `pre-commit`, does it ensure that there will be no unchecked code committed?
+
+No, because you can still do this:
+
+```sh
+git add . && \
+git commit -m 'whatever I like' --force
+```
+
+See the `--force` flag? That's a hidden time bomb!
+
+We need the second defense line before those **forced committed** code are pushed to our remote repository and contaminate the codebase.
+
+Create a file named `.husky/lint-incremental-push-files.sh` with the code below.
+
+In this shell script, we'll find out those **incremental** JS/TS files we want to push, and run ESLint command only on them.
+
+```sh
+#!/bin/bash
+
+# Ensure you have the latest info from your remote
+git fetch
+
+# Automatically identify the current branch and corresponding remote branch
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+REMOTE_BRANCH="origin/${BRANCH}"
+
+# Find the last commit from the remote branch that has been pushed
+LAST_PUSHED_COMMIT=$(git rev-parse ${REMOTE_BRANCH})
+
+# Find the current commit
+CURRENT_COMMIT=$(git rev-parse HEAD)
+
+# List changed files since the last pushed commit that match the desired extensions
+CHANGED_FILES=$(git diff --name-only $LAST_PUSHED_COMMIT $CURRENT_COMMIT | grep -E '\.(js|jsx|ts|tsx)$')
+
+echo "Files to lint:"
+echo $CHANGED_FILES
+
+# Run ESLint on these files if any are found
+if [ -z "$CHANGED_FILES" ]
+then
+    echo "No JavaScript/TypeScript files to lint."
+else
+    echo "Linting files..."
+    ./node_modules/.bin/eslint $CHANGED_FILES
+    if [ $? -ne 0 ]; then
+        echo "Linting issues found, please fix them."
+        exit 1
+    fi
+fi
+
+```
+
+Make the script executable:
+
+```sh
+chmod +x .husky/lint-incremental-push-files.sh
+```
+
+Create the **Git Push Hook** named `.husky/pre-push`, and add the running of the script to it.
+
+```sh
+echo "./lint-incremental-push-files.sh" > .husky/pre-push
+```
+
+Now this shell script will run every time before your push, no **forced committed** code can pass!
+
+### Force `test` before push
+
+Let's modify our team's workflows.
+
+Now I decide to allow only **linted** code **commits** without **test** verification.
+
+However, we will permit code **pushes** only if they have already passed the **test** verification.
+
+Therefore, we will move the `npm test` command from the **Git Commit Hook** hook to the **Git Push Hook** named `pre-push`.
+
+To do that, edit `./husky/pre-commit`:
 
 ```diff
-npm run lint
+npm run lint:staged
 - npm test
 ```
+
+And create the **Git Push Hook** with the test command.
 
 ```sh
 echo "npm test" > .husky/pre-push
 ```
 
-`./husky/pre-push`:
-
-```diff
-+ npm test
-```
-
-Edit the `package.json`'s `test` command to force to test to fail:
+Let's edit the `package.json`'s `test` command to force the test to fail.
 
 ```diff
 "scripts": {
--    "test": "echo \"Error: no test specified\" && exit 0",
-+    "test": "echo \"Error: no test specified\" && exit 1",
+-  "test": "exit 0",
++  "test": "exit 1",
 ```
 
 Now if you try to push the code (of course you need to commit it first) you'll fail because we have a `exit 1` in the command.
@@ -429,7 +503,7 @@ git push origin main
 
 ![alt text](images/image-12.png)
 
-Revert `exit 1` to `exit 0`, or use your real test scripts that can pass, your code push to the remote repository will success!
+Revert `exit 1` to `exit 0`, or use your **real test scripts** that can pass, your code push to the remote repository will success!
 
 ## DIY
 
