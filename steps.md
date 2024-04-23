@@ -10,6 +10,8 @@ If you prefer to run the demo I've written rather than following the steps one b
 
 ## Key Takeaways
 
+First I would like to outline all the steps I'm gonna elaborate on in this post.
+
 1. [Init your Project](#1-init-your-project-if-you-havent)
 2. [Git Commit Hook](#2-git-commit-hook)
 3. [Simple Code Linting](#3-simple-code-linting)
@@ -23,7 +25,7 @@ If you prefer to run the demo I've written rather than following the steps one b
 11. [Test the Incremental Linting](#11-test-the-incremental-linting)
 12. [Force test before push](#12-force-test-before-push)
 
-Don't worry, every step is clear and straightforward.
+But don't worry, every step is clear and straightforward.
 
 ## 1. Init your Project (if you haven't)
 
