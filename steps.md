@@ -24,7 +24,7 @@ If you prefer to run the demo I've written rather than following the steps one b
 12. [Force test before push](#12-force-test-before-push)
 13. [DIY your workflows](#13-diy-your-workflows)
 
-And don't be afraid, every step is concise and simple.
+Don't worry, every step is clear and straightforward.
 
 ## 1. Init your Project (if you haven't)
 
