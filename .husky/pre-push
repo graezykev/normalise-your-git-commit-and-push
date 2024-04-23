@@ -1,1 +1,2 @@
+./lint-incremental-push-files.sh
 npm test
