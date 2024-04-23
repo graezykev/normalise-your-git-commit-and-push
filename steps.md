@@ -2,7 +2,51 @@
 
 Catch a glimpse of what I'm going to do in this post.
 
-<https://www.mermaidchart.com/app/projects/8ce67b87-532b-4cc1-ac6b-b699b102c0de/diagrams/f4d8ba46-56ff-42a7-8637-73f29036db28/version/v0.1/edit>
+```mermaid
+
+flowchart TB
+
+comit_command1[git commit -m 'your message']
+
+push_command1[git push origin branch-name]
+
+lint_staged_c[eslint --fix your-staged-files]
+style lint_staged_c fill:#bbf,stroke:#f66
+
+NPM_lint_staged[npm run lint:staged]
+
+NPM_lint_increment[npm run lint:incremental-push]
+
+lint_increment_sh[lint-incremental-push-files.sh]
+style lint_increment_sh fill:#bbf,stroke:#f66
+
+NPM_test[npm run test]
+style NPM_test fill:#bbf,stroke:#f66
+
+commit_hook[git commit hook: .husky/pre-commit]
+style commit_hook fill:#bbf,stroke:#f66
+
+msg_hook[commit message hook: .husky/.commit-msg]
+style msg_hook fill:#bbf,stroke:#f66
+
+msg_config[commitlint.config.js]
+style msg_config fill:#bbf,stroke:#f66
+
+push_hook[git push hook: .husky/.pre-push]
+style push_hook fill:#bbf,stroke:#f66
+
+LintStagedSuccess{no error}
+LintIncrementalSuccess{no error}
+MsgPass{format is validated}
+CommitSuccess(Commit Success)
+testPass{test pass}
+PushSuccess(Push Success)
+
+comit_command1 --> |trigger| commit_hook --> |run| NPM_lint_staged --> |run| lint_staged --> lint_staged_c --> LintStagedSuccess --> |trigger| msg_hook --> |validate by| msg_config --> MsgPass --> CommitSuccess
+
+push_command1 --> |trigger| push_hook --> |run| NPM_lint_increment --> |run| lint_increment_sh --> LintIncrementalSuccess --> |trigger| NPM_test --> testPass --> PushSuccess
+
+```
 
 ### GitHub Repo
 
