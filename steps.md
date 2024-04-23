@@ -19,9 +19,11 @@ If you prefer to run the demo I've written rather than following the steps one b
 7. Add Commit Message Format Rules to Commit Message Hook
 8. Tailor your Commit Message Format
 9. Git Push Hook
-9.1 Incremental Push Code Linting
-9.2 Test the Incremental Linting
-9.3 Force test before push
+
+- 9.1 Incremental Push Code Linting
+- 9.2 Test the Incremental Linting
+- 9.3 Force test before push
+
 10. DIY your workflows
 
 ## 1. Init your Project (if you haven't)
