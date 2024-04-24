@@ -1,14 +1,14 @@
 ## Introduction
 
-Today's topic is about leveraging Git Hooks to stipulate the Git workflow, specifically, about linting your codes before they're committed and pushed, about normalising the commit message's format.
+Today's topic revolves around leveraging Git Hooks to streamline Git workflows, focusing on code linting before commits and pushes, and standardizing the format of commit messages.
 
-**Git Hooks** are some kind of **custom scripts** when certain important actions occur.
+**Git Hooks** are essentially **custom scripts** that trigger during key Git actions.
 
-There are two groups of these hooks: client-side and server-side. **Client-side hooks** are triggered by operations such as committing, merging and pushing, while **server-side** hooks run on network operations such as receiving pushed commits.
+There are two categories of Git Hooks: **client-side** and **server-side**. Client-side hooks are activated by operations such as committing, merging, and pushing, whereas server-side hooks are triggered by network operations, like receiving pushed commits.
 
-In this post, I mainly focus on **Client-side hooks**, the 3 hooks I'll elaborate are **pre commit**, **commit message** and **pre push**, and the central tool is [Husky](https://typicode.github.io/husky/), which makes our configuring of Git Hooks more easy and straightforward.
+In this post, I will primarily discuss client-side hooks. I'll delve into three specific hooks: **pre-commit**, **commit-msg**, and **pre-push**. The central tool discussed will be [Husky](https://typicode.github.io/husky/), which simplifies the configuration of Git Hooks, making it more straightforward.
 
-Catch a glimpse of what I'm going to introduce in this post.
+Here’s a preview of what I will cover in this post:
 
 ```mermaid
 
@@ -58,7 +58,7 @@ push_command1 --> |trigger| push_hook --> |run| NPM_lint_increment --> |run| lin
 
 ### GitHub Repo
 
-If you prefer to run the demo I've written rather than following the steps one by one, check out this [GitHub repository](https://github.com/graezykev/normalise-your-git-commit-and-push) to try first and get a quick overview.
+If you'd prefer to run the demo I've created instead of following the steps individually, check out this [GitHub repository](https://github.com/graezykev/normalise-your-git-commit-and-push) for a quick overview and hands-on experience.
 
 ## Key Takeaways
 
@@ -102,9 +102,7 @@ The **Git Pre-Commit Hook** is triggered just after you execute the `git commit`
 
 What is commit message editor?
 
-The most simple way of specifying our commit message is to execute `git commit -m 'my commit message'`.
-
-However, there's a more interactive way to commit using `git commit`.
+The most simple way of specifying our commit message is to execute `git commit -m 'my commit message'`. However, there's a more interactive way to commit using `git commit`.
 
 ![alt](images/terminal.gif)
 
@@ -118,7 +116,7 @@ Let's explore how we can accomplish this.
 
 ### Install Husky
 
-The first important thing is to install Husky.
+The first important step is to install Husky.
 
 ```sh
 npm install -D husky@9
@@ -130,7 +128,7 @@ npm install -D husky@9
 npx husky init
 ```
 
-What does it mainly do?
+What does the command `husky init` primarily do?
 
 - create `hooksPath = .husky/_` in `.git/config`
 
@@ -146,6 +144,8 @@ What does it mainly do?
 
 ### Try A Commit
 
+Since our `pre-commit` hook has been initiated, let's try it.
+
 ```sh
 git add .
 ```
@@ -154,11 +154,11 @@ git add .
 git commit -m 'first commit'
 ```
 
-Here is what you'll see from the terminal console.
+Here is what you'll see from the terminal console:
 
 ![alt text](images/image.png)
 
-This is because we have an `exit 1` in `package.json`.
+It fails because the pre-commit hook runs the `test` job, which contains only an `exit 1` command in the `test` section of `package.json`.
 
 ```json
 "scripts": {
@@ -175,19 +175,21 @@ Changing it to `exit 0` will make the commit work.
 
 ![alt text](images/image-1.png)
 
-> **In a real production project, you should specify your real `test` command, like Jest, Playwright, etc.**
+> **In a real production project, you should specify your actual `test` command, such as Jest, Playwright, etc.**
 
 ## 3. Code Linting
 
-For now, we only have a `test` command in our **pre commit** hook, next, we're going to supplement it with a **Linting** command, to check the **Code Style** before you commit JS code.
+For now, our **pre-commit** hook only includes a `test` command. Next, we'll add a **Linting** command to check the **Code Style** before you commit JavaScript code.
 
 ### Install & Configure Linting Tools
+
+Before Linting code in pre-commit hook, let's install and configure ESLint.
 
 ```sh
 npm install -D eslint@9 @eslint/js@9
 ```
 
-Create a `eslint.config.js` with the code below.
+Create an `eslint.config.js` file with the code below:
 
 ```js
 import pluginJs from "@eslint/js";
@@ -220,37 +222,39 @@ export const field = {
 npm run lint
 ```
 
-This will produce some errors because we haven't defined the variable `process` in the Demo code, which is not allowed in the ESLint rule.
+This will produce some errors because we haven't defined the variable `process` in the demo code, which is not allowed according to the ESLint rule.
 
 ![alt text](images/image-3.png)
 
-## 4. Add Linting to Git Commit Hook
+## 4. Add Linting to Git Pre-Commit Hook
 
-### Put Linting Command to Git Commit hook
+In the last step, we configured a command to lint our code style. Now, we're going to integrate it with the pre-commit hook.
 
-Add `npm run lint` to the first line of `.husky/pre-commit`
+### Put Linting Command to Git Pre-Commit hook
+
+Add `npm run lint` to the first line of `.husky/pre-commit`.
 
 ```diff
 + npm run lint
 npm test
 ```
 
-### Try to Commit
+### Try A Commit
 
-Now all commits will trigger the run of this linting command.
+Now, all commits will trigger the execution of this linting command.
 
 ```sh
 git add . & \
 git commit -m 'second commit'
 ```
 
-![alt text](images/image-2.png)
+You'll encounter a failure because you must fix all the linting errors (mentioned above) before committing the code.
 
-You'll fail because you have to fix all the linting errors (we mentioned above) before committing the code.
+![alt text](images/image-2.png)
 
 ### Fix the Linting Errors
 
-Fix it by editing `index.js`.
+Fix it by editing `index.js`:
 
 ```diff
 +const process = {
@@ -265,7 +269,7 @@ export const field = {
 
 ```
 
-Commit again, it will work.
+Commit again and it should work.
 
 ```sh
 git add . & \
@@ -274,35 +278,39 @@ git commit -m 'commit after fix index.js'
 
 ![alt text](images/image-4.png)
 
-By now, **both `npm run lint` and `npm test` in `pre-commit` need to pass before you can commit**.
+### Brief Sum-Up
+
+By now, **both `npm run lint` and `npm test` must pass in the `pre-commit` hook before you can commit**.
 
 ### Better Linting
 
-This way of linting is insufficient in a production project, to integrate a robust linting tool chain, you can checkout another post of mine to learn: [Configure ESLint in a TypeScript project to adhere to Standard JS](https://github.com/graezykev/ts-eslint-standard-js).
+This method of linting may be insufficient for a production project. To integrate a robust linting toolchain, you can check out another post of mine to learn more: [Configure ESLint in a TypeScript Project to Adhere to Standard JS](https://github.com/graezykev/ts-eslint-standard-js).
 
 ## 5. lint-staged
 
-Have you noticed the problem of `npm run lint` in `pre-commit`?
+Have you noticed the problem with `npm run lint` in the `pre-commit`?
 
-Yes, **all your JS files in the project** are checked in this process, what is the problem though?
+Yes, **all your JavaScript files in the project** are checked in this process. What is the problem, though?
 
-Say, you're working on a historical project with hundreds of JS files, and it never integrated linting tools and Git commit hooks before, i.e. there may be numerous code style issues in those existing code.
+Suppose you're working on a historical project with hundreds of JavaScript files that had never integrated linting tools or Git commit hooks before, meaning there may be numerous code style issues in the existing code.
 
-Today you integrate these linting tools and Git commit hooks, and tomorrow your teammate edits merely one JS file, but he can't commit it because he will be facing all the linting issues at a time which is thrown out by `npm run lint`.
+Today, you integrate these linting tools and Git commit hooks, and tomorrow your teammate edits just one JavaScript file. However, he can't commit it because he faces all the linting issues at once, which are identified by `npm run lint`.
 
-Let me give another example. You spent a day working on developing a web page and you've written some `header.js`, `aside.js`, `main.js`, `footer.js` ... But, only the `header.js` is finished, the others are still under development.
+Here’s another example: You've spent a day developing a web page and have written several files like `header.js`, `aside.js`, `main.js`, `footer.js`, etc. But, only `header.js` is complete, the others are still under development.
 
-Now it's 5 o'clock, time to call it a day! You decide to commit `header.js` first, but you encounter similar obstacles as the former example.
+Now it's 5 o'clock, time to call it a day! You decide to commit `header.js` first, but you encounter similar obstacles as in the previous example.
 
-What we need is a way of committing some **"code we really want to commit now"**, or more correctly elaborate by the Git terminology **staged** files.
+What we need is a way to commit only the **"code we really want to commit now"**, or more correctly, by Git terminology, the **staged** files.
 
 In simple terms, **staged** files are those files you've added to the **[Git Staging Area](https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F#_the_three_states)** by `git add <filename>`.
 
-Only those codes in the staging area should be **linted** in each commit.
+Only the code in the staging area should be **linted** with each commit.
 
-Now let's make it done.
+Now, let's see how to get it done.
 
 ### Install lint-staged
+
+[lint-staged](https://github.com/lint-staged/lint-staged) is the second important tools we need here, install it via NPM.
 
 ```sh
 npm install -D lint-staged
@@ -310,30 +318,30 @@ npm install -D lint-staged
 
 ### Configure lint-staged
 
-Create a `lint-staged.config.js` in the project root with the configuration below.
+Create a `lint-staged.config.js` file in the project root with the configuration below.
 
 ```js
 export default {
-  // you can lint other kind of files with other tools
+  // You can lint other types of files with different tools.
   "*.{js,jsx,ts,tsx}": [
-    // you can also add other tools to lint you JS here
+    // You can also add other tools to lint your JavaScript here.
     "eslint"
   ]
 }
 
-var b // I put this line to elicit an error output in ESLint on purpose
+var b // I included this line to intentionally elicit an error output in ESLint latter.
 ```
 
 > Note: I use `export default xxx` here because my `package.json` includes the configuration `"type": "module"`. If you don't have this configuration, use `module.exports = xxx` instead.
 
-### Add lint-staged command to NPM script
+### Add lint-staged Command to NPM Script
 
 ```diff
   "lint": "eslint .",
 + "lint:staged": "lint-staged",
 ```
 
-And of course modify your hook command with it in `.husky/pre-commit`.
+And of course, modify your hook command accordingly in `.husky/pre-commit`.
 
 ```diff
 -npm run lint
@@ -342,33 +350,70 @@ And of course modify your hook command with it in `.husky/pre-commit`.
 
 ### Use lint-staged
 
-```sh
-git add lint-staged.config.js
+Remove some code from `index.js`:
+
+```diff
+-const process = {
+-    env: {
+-        bit: 2
+-    }
+-}
+
+export const field = {
+    "b": process.evn.bit,
+}
+
 ```
+
+To let `lint-staged` identify what you're going to commit, first add the file you want to commit to the Git **Staging Area**.
+
+In this scenario, we have ESLint issues in both `lint-staged.config.js` and `index.js`, but let's say we only want to commit and lint `lint-staged.config.js`.
+
+```sh
+git add lint-staged.config.js # don't add index.js
+```
+
+Then, commit the file `lint-staged.config.js`.
 
 ```sh
 git commit -m 'test lint-staged'
 ```
 
-This time, only the **newly added (staged)** file `lint-staged.config.js` is checked in your commit. You don't need to fix all your JS files in the project, nor even all the JS files you have modified, but just the **staged** file(s) you really want to commit.
+This time, only the **newly added (staged)** file `lint-staged.config.js` is checked during your commit. You don't need to fix all the JavaScript files in the project, nor even all the JavaScript files you have modified, but just the **staged** file(s) you actually want to commit.
 
 ![alt text](images/image-5.png)
 
-Remove the line `var b` in it then the push will succeed.
+Remove the line `var b` in it, and then the commit will succeed.
 
-### lint-staged other files
+### lint-staged Other Files
 
-There are more linting tools I won't go too deep but you can integrate with `lint-staged`, such as lint your CSS contents by [Stylelint](https://stylelint.io/), or event lint your README files by [markdownlint](https://github.com/DavidAnson/markdownlint), etc.
+There are more linting tools that I won't go into deeply, but you can integrate them with `lint-staged`. For example, you can lint your **CSS** content with [Stylelint](https://stylelint.io/), or even lint your **README** files with [markdownlint](https://github.com/DavidAnson/markdownlint), etc.
 
 ## 6. Commit Message Hook
 
-### Install Commit Message Linting tools
+In the previous steps, we introduced the Git Pre-Commit Hook, which activates immediately after you execute the `git commit` command but before the commit message editor opens or the commit is finalized.
+
+Our next step is to validate the **format of the commit message**.
+
+**Why is format of the commit message so important?**
+
+Well, Git commit message is a **semantic** description of what you are going to do in a specific commit. It's a gateway to **communicate** with your teammates, code reviewers are easier to understand your intention without diving into the code.
+
+Git commit message also **improves traceability**, by linking the commit to external resources like bug and task trackers through identifiers or tags, enhancing the traceability of work and the management of project documentation.
+
+That's the significance of adhering to a standard format for commit messages promotes clarity, coherence, and collaboration within a team.
+
+### Install Commit Message Linting Tools
+
+[commitlint](https://commitlint.js.org/) is the most important tool we need for this step.
 
 ```sh
 npm install --save-dev @commitlint/{cli,config-conventional}
 ```
 
-### Configure Commit Message Linting Tools
+### Configure `commitlint`
+
+Below is a simple (but conventional) configuration, adhering to the [conventional commit format](https://www.conventionalcommits.org/en/v1.0.0/#summary).
 
 ```sh
 echo "export default { extends: ['@commitlint/config-conventional'] };" > commitlint.config.js
@@ -376,7 +421,9 @@ echo "export default { extends: ['@commitlint/config-conventional'] };" > commit
 
 > Note: I use `export default xxx` here because my `package.json` includes the configuration `"type": "module"`. If you don't have this configuration, use `module.exports = xxx` instead.
 
-### Test Commit Message Linting Tools
+### Test `commitlint`
+
+Run `commitlint` directly to verify the message we used in our last commit, checking if it meet the [conventional commit format](https://www.conventionalcommits.org/en/v1.0.0/#summary).
 
 ```sh
 npx commitlint --from HEAD~1 --to HEAD --verbose
@@ -392,7 +439,7 @@ You will encounter this error:
 
 The test case above is mimicking a commit command of `git commit -m 'commit after fix index.js'`.
 
-In this case your **commit message** is `"commit after fix index.js"`, but we have the **rule** of commit message **format** which is configured in `commitlint.config.js`, stipulating the commit message should be structured as [follows](https://www.conventionalcommits.org/en/v1.0.0/#summary):
+In this case, your **commit message** is `"commit after fixing index.js"`, but we have a **rule** for the commit message **format** configured in `commitlint.config.js`, which stipulates that the commit message should be structured as [follows](https://www.conventionalcommits.org/en/v1.0.0/#summary):
 
 ```txt
 <type>[optional scope]: <description>
@@ -402,11 +449,13 @@ In this case your **commit message** is `"commit after fix index.js"`, but we ha
 [optional footer(s)]
 ```
 
-i.e. your commit message must be at least like `"feat: your commit description ..."`,
+i.e., your commit message must be at least formatted like `"feat: your commit description ..."`.
 
-Your message of `"commit"` couldn't satisfy the rule, which means your commit will fail.
+However, Your message of `"commit after fixing index.js"` doesn't satisfy the rule, which means your commit will fail.
 
-## 7. Add Commit Message Format Rules to Commit Message Hook
+## 7. Add `commitlint` to Commit Message Hook
+
+Running `commitlint` directly is not appropriate; we should integrate it into an automatic Git Hook (Commit Message Hook).
 
 ### Add Linting Script to the Hook
 
@@ -416,34 +465,34 @@ echo "npx --no -- commitlint --edit \$1" > .husky/commit-msg
 
 You'll see a newly created file `.husky/commit-msg` with the content below:
 
-`.husky/commit-msg`:
-
 ```diff
 +npx --no -- commitlint --edit \$1
 ```
 
 ### Test the Hook
 
+The Commit Message Hook is ready, now test it.
+
 ```sh
 git add . & \
 git commit -m "this will fail"
 ```
 
-It fails because no `type` nor `subject` is specified.
+It fails because neither a `type` nor a `subject` is specified.
 
 ![alt text](images/image-7.png)
 
-Make some slightly adjustment.
+Make some slightly adjustments:
 
 ```sh
 git commit -m "foo: this will also fail"
 ```
 
-Because `foo` is not a legitimate `type` so it fails again.
+As `foo` is not a valid `type`, it fails again.
 
 ![alt text](images/image-8.png)
 
-Change the message again.
+Modify the message once more:
 
 ```sh
 git commit -m "chore: this is a legal commit message"
@@ -455,13 +504,11 @@ Hooray!
 
 ## 8. Tailor your Commit Message Format
 
-The [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0/#summary) may not fulfil your team's requirement.
+In real senarios, the [conventional commit message format](https://www.conventionalcommits.org/en/v1.0.0/#summary) may not meet your team's requirements, sometimes you need to customise your rules.
 
-Sometimes you need to customise your rules.
+For instance, your team is using [Jira](https://www.atlassian.com/software/jira) for project and product management, as well as issue tracking, etc. You and your teammates have agreed that every commit should include a Jira ticket ID, allowing you to trace back the real motivation (a product requirement, a technical optimization, a bug, etc.) of every code change.
 
-For instance, your team is using [Jira](https://www.atlassian.com/software/jira) for project and product management as well as issue tracking etc., you and your teammates make an appointment that, every commit should have a Jira ticket ID, so you can trace back the real motivation (a product requirement, a technical optimization, a bug, etc.) of every code change.
-
-To do this, edit your `commitlint.config.js` as below:
+To do this, edit your `commitlint.config.js` as follows:
 
 ```js
 export default {
@@ -493,7 +540,7 @@ export default {
 
 > Note: I use `export default xxx` here because my `package.json` includes the configuration `"type": "module"`. If you don't have this configuration, use `module.exports = xxx` instead.
 
-Now test it.
+Test it.
 
 ```sh
 git add . & \
@@ -510,34 +557,51 @@ Try another one:
 git commit -m 'chore: [PRJ-1234] a commit with sample id'
 ```
 
-Gotcha!
+You've got it!
 
 ![alt text](images/image-11.png)
 
 ## 9. Git Push Hook
 
-A **Git Push Hook** is the hook which is triggered before the push. You can use Git Push Hook as another **"firewall"** to validate the code before they are pushed to the remote repository.
+We have taken some steps to ensure our code style and commit message format in the previous steps. One further step is to ensure the code quality before it's pushed to the remote repository.
+
+A **Git Push Hook** is triggered before a push (`git push origin <branch>`) occurs. You can use the Git Push Hook as another **"firewall"** to validate the code before it is pushed to the remote repository.
 
 ## 10. Incremental Code Linting
 
-Although we have run `npm run lint:staged` in `pre-commit`, does it ensure that there will be no unchecked code committed?
+We have run `npm run lint:staged` in `pre-commit`. Does it ensure that there will be no unchecked code contaminating our codebase?
 
-No, because you can commit codes that haven't been fixed by this:
+The answer is **No**. You can still commit code that hasn't been fixed by this:
 
 ```sh
 git add . && \
 git commit -m 'whatever I like' --no-verify
 ```
 
-See the `--no-verify` flag? This causes a **forced commit**, what a hidden time bomb! You're even not able to stop your teammates from doing it sneakily!
+See the `--no-verify` flag? This allows for a **forced commit**. It's like a hidden time bomb! You're not even able to stop your teammates from doing it sneakily!
 
-So, here we need a second defence line before those **forced committed** codes are pushed to our remote repository and contaminate the codebase.
+So, here we need a second defence line before those **forced committed** codes are pushed to our remote repository and pollute the codebase.
 
-### Create a Incremental Push Linting Shell Script
+I need to clarify what I mean by **Incremental Code** here.
 
-Create a shell script file named `scripts/lint-incremental-push-files.sh` with the code below.
+Say we have the following commits: `commit-a` and `commit-b` have been pushed to the remote repository, and `commit-c` to `commit-N` (not sure how many commits in `...`) have not been pushed yet.
 
-In this shell script, we'll find out those **incremental** JS files we want to **push**, and run the ESLint command only on them.
+| Commit | Commit time | push status |
+| -------- | ------- | ------- |
+| commit-N | today | not pushed |
+| ... | today | not pushed |
+| commit-d | today| not pushed |
+| commit-c | today | not pushed |
+| commit-b | yesterday | pushed |
+| commit-a | the-day-before-yesterday | pushed |
+
+Right now, we're going to push from `commit-c` to `commit-N`, and `commit-c` to `commit-N` represent the **incremental code** in this context.
+
+### Incremental Code Linting Shell Script
+
+Create a **Shell script** file named `scripts/lint-incremental-push-files.sh` with the following code.
+
+In this Shell script, we'll identify those **incremental** JavaScript files we want to **push**, and then run the ESLint command only on them.
 
 ```sh
 #!/bin/bash
@@ -594,17 +658,17 @@ Add this script to a NPM script in `package.json`.
   },
 ```
 
-Create the **Git Push Hook** configure file named `.husky/pre-push`, and add the NPM script to it.
+Create the **Git Push Hook** configuration file named `.husky/pre-push`, and add the NPM script to it.
 
 ```sh
 echo "npm run lint:incremental-push" > .husky/pre-push
 ```
 
-Now this shell script will run every time before your push, no **forced committed** code can pass!
+Now, this Shell script will run every time before your push. Your `git push` command will fail if the incremental code doesn't pass the ESLint check, meaning no **force-committed** code can pass through!
 
 ### Test Incremental Code Linting
 
-Before making any changes and test the incremental changes since last push, **we need to push the code first**.
+Before making any changes and testing the incremental changes since the last push, **we need to push the code first**.
 
 ```sh
 git push origin main
@@ -627,7 +691,7 @@ git commit -am 'bypass eslint to commit'
 
 ![alt text](images/image-12.png)
 
-But you can bypass the check with `--no-verify`
+But you can bypass the check with `--no-verify`.
 
 ```sh
 git commit -am 'bypass eslint to commit' --no-verify
@@ -635,28 +699,28 @@ git commit -am 'bypass eslint to commit' --no-verify
 
 ![alt text](images/image-13.png)
 
-Do a similar thing to `eslint.config.js` with a new line.
+Do a similar thing to `eslint.config.js` with a new line:
 
 ```diff
 +var b;
 ```
 
-Bypass the check script again.
+Bypass the check process again.
 
 ```sh
 git add . & \
 git commit -am 'bypass eslint again to commit' --no-verify
 ```
 
-Just now, we have 2 commits including `index.js` and `eslint.config.js`, in which there're actually ESLint issues, but they are committed by tricks (`--no-verify`).
+Just now, we have two commits including `index.js` and `eslint.config.js`, in which there are actually ESLint issues, but they were committed using tricks (`--no-verify`).
 
-The commit in the yellow rectangle are so call **Incremental Changes** to be pushed, but they should not be push!
+The commits in the yellow rectangle are the so-called **incremental changes** to be pushed, but they should not be pushed since they have ESLint issues!
 
 ![alt text](images/image-14.png)
 
-But don't panic, because they won't be able to be pushed because they will face the punishment of the **Git Push Hook** we made above!
+But don't panic, we've got your back! They won't be able to be pushed because they will face the punishment of the **Git Push Hook** we made above!
 
-If you push the code.
+If you try to push the code:
 
 ```sh
 git push origin main
@@ -683,13 +747,13 @@ npm run lint:staged
 - npm test
 ```
 
-And put this `test` command to the **Git Push Hook**.
+And move the `test` command to the **Git Push Hook**.
 
 ```sh
 echo "npm test" >> .husky/pre-push
 ```
 
-Let's edit the `package.json`'s `test` command to force the test to fail.
+Let's edit the `package.json`'s `test` command to intentionally make the test fail:
 
 ```diff
 "scripts": {
@@ -697,7 +761,7 @@ Let's edit the `package.json`'s `test` command to force the test to fail.
 +  "test": "exit 1",
 ```
 
-Now if you try to push whatever code you'll fail because we have an `exit 1` in the command, which means the `test` process is not passed, forbiding you from pushing the `"un-test"` code to the remote repository.
+Now, if you try to push any code, you'll fail because we have an `exit 1` in the command. This means the `test` process is not passed, preventing you from pushing the **"un-tested"** code to the remote repository.
 
 ```sh
 git commit -am 'chore: [TEST-1234] test commit'& \
@@ -706,11 +770,11 @@ git push origin main
 
 ![alt text](images/image-16.png)
 
-Revert `exit 1` to `exit 0`, or use your **real test scripts** that can pass, your code push to the remote repository will succeed!
+Revert `exit 1` to `exit 0`, or use your **actual test scripts** that can pass, your code push to the remote repository will succeed!
 
 ### Force Push
 
-Unfortunately, you can bypass the `pre-push` check and force push the code by using the `--no-verify` flag, just as you can force a commit.
+Unfortunately, you can still bypass the `pre-push` check and force push the code by using the `--no-verify` flag, just as you can force a commit.
 
 ```sh
 git push origin main --no-verify
