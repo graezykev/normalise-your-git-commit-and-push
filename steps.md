@@ -73,9 +73,8 @@ I would like to outline all the steps I'm gonna elaborate on in this post.
 7. [Add Commit Message Format Rules to Commit Message Hook](#7-add-commit-message-format-rules-to-commit-message-hook)
 8. [Tailor your Commit Message Format](#8-tailor-your-commit-message-format)
 9. [Git Push Hook](#9-git-push-hook)
-10. [Incremental Push Code Linting](#10-incremental-push-code-linting)
-11. [Test the Incremental Linting](#11-test-the-incremental-linting)
-12. [Force test before push](#12-force-test-before-push)
+10. [Incremental Code Linting](#10-incremental-code-linting)
+11. [Force test Before Push](#11-force-test-before-push)
 
 But don't worry, each step is clear and straightforward.
 
@@ -519,7 +518,7 @@ Gotcha!
 
 A **Git Push Hook** is the hook which is triggered before the push. You can use Git Push Hook as another **"firewall"** to validate the code before they are pushed to the remote repository.
 
-## 10. Incremental Push Code Linting
+## 10. Incremental Code Linting
 
 Although we have run `npm run lint:staged` in `pre-commit`, does it ensure that there will be no unchecked code committed?
 
@@ -603,9 +602,9 @@ echo "npm run lint:incremental-push" > .husky/pre-push
 
 Now this shell script will run every time before your push, no **forced committed** code can pass!
 
-## 11. Test the Incremental Linting
+### Test Incremental Code Linting
 
-Before making any changes and test the incremental changes since last push, we need to push the code first.
+Before making any changes and test the incremental changes since last push, **we need to push the code first**.
 
 ```sh
 git push origin main
@@ -667,7 +666,7 @@ All **Incremental Errors** will be caught!
 
 ![alt text](images/image-15.png)
 
-## 12. Force `test` before push
+## 11. Force `test` Before Push
 
 Let's modify our team's workflows.
 
