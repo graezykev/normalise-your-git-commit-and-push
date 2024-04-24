@@ -129,7 +129,7 @@ git commit -m 'first commit'
 
 Here is what you'll see from the terminal console.
 
-![alt text](image.png)
+![alt text](images/image.png)
 
 This is because we have an `exit 1` in `package.json`.
 
@@ -146,7 +146,7 @@ Changing it to `exit 0` will make the commit work.
 +  "test": "exit 0",
 ```
 
-![alt text](image-1.png)
+![alt text](images/image-1.png)
 
 > **In a real production project, you should specify your real `test` command, like Jest, Playwright, etc.**
 
@@ -195,7 +195,7 @@ npm run lint
 
 This will produce some errors because we haven't defined the variable `process` in the Demo code, which is not allowed in the ESLint rule.
 
-![alt text](image-3.png)
+![alt text](images/image-3.png)
 
 ## 4. Add Linting to Git Commit Hook
 
@@ -217,7 +217,7 @@ git add . & \
 git commit -m 'second commit'
 ```
 
-![alt text](image-2.png)
+![alt text](images/image-2.png)
 
 You'll fail because you have to fix all the linting errors (we mentioned above) before committing the code.
 
@@ -245,7 +245,7 @@ git add . & \
 git commit -m 'commit after fix index.js'
 ```
 
-![alt text](image-4.png)
+![alt text](images/image-4.png)
 
 By now, **both `npm run lint` and `npm test` in `pre-commit` need to pass before you can commit**.
 
@@ -325,7 +325,7 @@ git commit -m 'test lint-staged'
 
 This time, only the **newly added (staged)** file `lint-staged.config.js` is checked in your commit. You don't need to fix all your JS files in the project, nor even all the JS files you have modified, but just the **staged** file(s) you really want to commit.
 
-![alt text](image-5.png)
+![alt text](images/image-5.png)
 
 Remove the line `var b` in it then the push will succeed.
 
@@ -359,7 +359,7 @@ npx commitlint --from HEAD~1 --to HEAD --verbose
 
 You will encounter this error:
 
-![alt text](image-6.png)
+![alt text](images/image-6.png)
 
 ### Why Dose It Fail?
 
@@ -404,7 +404,7 @@ git commit -m "this will fail"
 
 It fails because no `type` nor `subject` is specified.
 
-![alt text](image-7.png)
+![alt text](images/image-7.png)
 
 Make some slightly adjustment.
 
@@ -414,7 +414,7 @@ git commit -m "foo: this will also fail"
 
 Because `foo` is not a legitimate `type` so it fails again.
 
-![alt text](image-8.png)
+![alt text](images/image-8.png)
 
 Change the message again.
 
@@ -424,7 +424,7 @@ git commit -m "chore: this is a legal commit message"
 
 Hooray!
 
-![alt text](image-9.png)
+![alt text](images/image-9.png)
 
 ## 8. Tailor your Commit Message Format
 
@@ -473,9 +473,9 @@ git add . & \
 git commit -m 'chore: try to commit'
 ```
 
-Oops! The commit fails as we just add a new rule to force a "JIRA ticket ID" in the commit message's subject.
+Oops! The commit fails as we just add a new rule to force a **"JIRA ticket ID"** in the commit message's subject.
 
-![alt text](image-10.png)
+![alt text](images/image-10.png)
 
 Try another one:
 
@@ -485,7 +485,7 @@ git commit -m 'chore: [PRJ-1234] a commit with sample id'
 
 Gotcha!
 
-![alt text](image-11.png)
+![alt text](images/image-11.png)
 
 ## 9. Git Push Hook
 
@@ -598,7 +598,7 @@ git add . & \
 git commit -am 'bypass eslint to commit'
 ```
 
-![alt text](image-12.png)
+![alt text](images/image-12.png)
 
 But you can bypass the check with `--no-verify`
 
@@ -606,7 +606,7 @@ But you can bypass the check with `--no-verify`
 git commit -am 'bypass eslint to commit' --no-verify
 ```
 
-![alt text](image-13.png)
+![alt text](images/image-13.png)
 
 Do a similar thing to `eslint.config.js` with a new line.
 
@@ -625,7 +625,7 @@ Just now, we have 2 commits including `index.js` and `eslint.config.js`, in whic
 
 The commit in the yellow rectangle are so call **Incremental Changes** to be pushed, but they should not be push!
 
-![alt text](image-14.png)
+![alt text](images/image-14.png)
 
 But don't panic, because they won't be able to be pushed because they will face the punishment of the **Git Push Hook** we made above!
 
@@ -637,7 +637,7 @@ git push origin main
 
 All **Incremental Errors** will be caught!
 
-![alt text](image-15.png)
+![alt text](images/image-15.png)
 
 ## 12. Force `test` before push
 
@@ -677,7 +677,7 @@ git commit -am 'chore: [TEST-1234] test commit'& \
 git push origin main
 ```
 
-![alt text](image-16.png)
+![alt text](images/image-16.png)
 
 Revert `exit 1` to `exit 0`, or use your **real test scripts** that can pass, your code push to the remote repository will succeed!
 
