@@ -294,7 +294,7 @@ Let me give another example. You spent a day working on developing a web page an
 
 Now it's 5 o'clock, time to call it a day! You decide to commit `header.js` first, but you encounter similar obstacles as the former example.
 
-What we need is a way of committing some **"incremental code"**, or more correctly elaborate by the Git terminology **staged** files.
+What we need is a way of committing some **"code we really want to commit now"**, or more correctly elaborate by the Git terminology **staged** files.
 
 In simple terms, **staged** files are those files you've added to the **[Git Staging Area](https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F#_the_three_states)** by `git add <filename>`.
 
