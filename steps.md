@@ -4,7 +4,7 @@ Today's topic is about leveraging Git Hooks to stipulate the Git workflow, speci
 
 **Git Hooks** are some kind of **custom scripts** when certain important actions occur.
 
-There are two groups of these hooks: client-side and server-side. **Client-side hooks** are triggered by operations such as committing, merging and pushing, while server-side hooks run on network operations such as receiving pushed commits.
+There are two groups of these hooks: client-side and server-side. **Client-side hooks** are triggered by operations such as committing, merging and pushing, while **server-side** hooks run on network operations such as receiving pushed commits.
 
 In this post, I mainly focus on **Client-side hooks**, the 3 hooks I'll elaborate are **pre commit**, **commit message** and **pre push**, and the central tool is [Husky](https://typicode.github.io/husky/), which makes our configuring of Git Hooks more easy and straightforward.
 
@@ -709,13 +709,23 @@ git push origin main
 
 Revert `exit 1` to `exit 0`, or use your **real test scripts** that can pass, your code push to the remote repository will succeed!
 
+### Force Push
+
+Unfortunately, you can bypass the `pre-push` check and force push the code by using the `--no-verify` flag, just as you can force a commit.
+
+```sh
+git push origin main --no-verify
+```
+
+To address this, we need **server-side** Git hooks or `CI` systems. However, these are more complex topics, and I won't delve deeply into them now. Perhaps I'll write another post to introduce them in the future.
+
 ## Conclusion: DIY your Workflows
 
-You should DIY your Git commit/push hooks to tailor your team's workflow, like
+In this post, I've delved into detailed steps to normalize our teams' Git workflow. My approach is just a basic framework; there are many Git hooks I haven't mentioned here. You should customize your Git hooks to tailor them to your team's workflow.
 
-- implement your specific rules of commit message format after discussing with your teammates
-- only lint code in a commit, then test code in a push
-- only lint code in a commit, then lint & test code in a push
-- both lint & test in commits and pushes
-- add other commands or scripts to your Git commit/push hooks, for example, push an IM message, or send an Email, to notify your teammates of your changes.
-- use your imagination to do whatever you want ...
+Here are some additional steps you might consider:
+
+- Implement specific rules for commit message formatting after discussing with your teammates.
+- Perform both linting and testing in commits and pushes.
+- Add other commands or scripts to your Git commit/push hooks, such as sending an IM message or an email to notify your teammates of your changes.
+- Use your imagination to customize the workflow as you see fit.
