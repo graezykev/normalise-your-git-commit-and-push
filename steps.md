@@ -213,10 +213,7 @@ npm test
 Now all commits will trigger the run of this linting command.
 
 ```sh
-git add .
-```
-
-```sh
+git add . & \
 git commit -m 'second commit'
 ```
 
@@ -244,7 +241,7 @@ export const field = {
 Commit again, it will work.
 
 ```sh
-git add .
+git add . & \
 git commit -m 'commit after fix index.js'
 ```
 
@@ -401,10 +398,7 @@ You'll see a newly created file `.husky/commit-msg` with the content below:
 ### Test the Hook
 
 ```sh
-git add .
-```
-
-```sh
+git add . & \
 git commit -m "this will fail"
 ```
 
@@ -475,7 +469,7 @@ export default {
 Now test it.
 
 ```sh
-git add .
+git add . & \
 git commit -m 'chore: try to commit'
 ```
 
@@ -600,7 +594,7 @@ Open `index.js` to add a simple line.
 You can not commit it because we have a `pre-commit` hook to lint the file.
 
 ```sh
-git add .
+git add . & \
 git commit -am 'bypass eslint to commit'
 ```
 
@@ -623,7 +617,7 @@ Do a similar thing to `eslint.config.js` with a new line.
 Bypass the check script again.
 
 ```sh
-git add .
+git add . & \
 git commit -am 'bypass eslint again to commit' --no-verify
 ```
 
