@@ -1,6 +1,14 @@
 ## Introduction
 
-Catch a glimpse of what I'm going to do in this post.
+Today's topic is about leveraging Git Hooks to stipulate the Git workflow, specifically, about linting your codes before they're committed and pushed, about normalising the commit message's format.
+
+**Git Hooks** are some kind of **custom scripts** when certain important actions occur.
+
+There are two groups of these hooks: client-side and server-side. **Client-side hooks** are triggered by operations such as committing, merging and pushing, while server-side hooks run on network operations such as receiving pushed commits.
+
+In this post, I mainly focus on **Client-side hooks**, the 3 hooks I'll elaborate are **pre commit**, **commit message** and **pre push**, and the central tool is [Husky](https://typicode.github.io/husky/), which makes our configuring of Git Hooks more easy and straightforward.
+
+Catch a glimpse of what I'm going to introduce in this post.
 
 ```mermaid
 
@@ -50,15 +58,15 @@ push_command1 --> |trigger| push_hook --> |run| NPM_lint_increment --> |run| lin
 
 ### GitHub Repo
 
-If you prefer to run the demo I've written rather than following the steps one by one, check out this [GitHub repository](https://github.com/graezykev/normalise-your-git-commit-and-push) to get a quick overview.
+If you prefer to run the demo I've written rather than following the steps one by one, check out this [GitHub repository](https://github.com/graezykev/normalise-your-git-commit-and-push) to try first and get a quick overview.
 
 ## Key Takeaways
 
-First I would like to outline all the steps I'm gonna elaborate on in this post.
+I would like to outline all the steps I'm gonna elaborate on in this post.
 
 1. [Init your Project](#1-init-your-project-if-you-havent)
-2. [Git Commit Hook](#2-git-commit-hook)
-3. [Simple Code Linting](#3-simple-code-linting)
+2. [Git Pre-Commit Hook](#2-git-pre-commit-hook)
+3. [Code Linting](#3-code-linting)
 4. [Add Linting to Git Commit Hook](#4-add-linting-to-git-commit-hook)
 5. [lint-staged](#5-lint-staged)
 6. [Commit Message Hook](#6-commit-message-hook)
@@ -69,7 +77,7 @@ First I would like to outline all the steps I'm gonna elaborate on in this post.
 11. [Test the Incremental Linting](#11-test-the-incremental-linting)
 12. [Force test before push](#12-force-test-before-push)
 
-But don't worry, every step is clear and straightforward.
+But don't worry, each step is clear and straightforward.
 
 ## 1. Init your Project (if you haven't)
 
@@ -89,15 +97,35 @@ git init && \
 echo 'node_modules' >> .gitignore
 ```
 
-## 2. Git Commit Hook
+## 2. Git Pre-Commit Hook
 
-### Install Git Hook Tools
+The **Git Pre-Commit Hook** is triggered just after you execute the `git commit` command, but before the commit message editor is opened (if you are not using the `-m` option), or before the commit is finalized (if you are using the `-m` option).
+
+What is commit message editor?
+
+The most simple way of specifying our commit message is to execute `git commit -m 'my commit message'`.
+
+However, there's a more interactive way to commit using `git commit`.
+
+![alt](images/terminal.gif)
+
+After you run `git commit` without the `-m` option and commit message, Git typically opens an editor for you to enter a commit message (This editor could be Vim, Emacs, Nano, or whatever your default command-line text editor is set to).
+
+Returning to the **Git Pre-Commit Hook**, we can use it to perform checks (such as running the ESLint command), and if these checks fail, the commit action is blocked.
+
+By sharing this **hook script**, you can ensure that every teammate commits only code that has been checked.
+
+Let's explore how we can accomplish this.
+
+### Install Husky
+
+The first important thing is to install Husky.
 
 ```sh
 npm install -D husky@9
 ```
 
-### Init Git Hook Tools
+### Init Husky
 
 ```sh
 npx husky init
@@ -117,7 +145,7 @@ What does it mainly do?
 
 - create `.gitignore` in `.husky/_`
 
-### Try It Out
+### Try A Commit
 
 ```sh
 git add .
@@ -150,7 +178,7 @@ Changing it to `exit 0` will make the commit work.
 
 > **In a real production project, you should specify your real `test` command, like Jest, Playwright, etc.**
 
-## 3. Simple Code Linting
+## 3. Code Linting
 
 For now, we only have a `test` command in our **pre commit** hook, next, we're going to supplement it with a **Linting** command, to check the **Code Style** before you commit JS code.
 
