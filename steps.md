@@ -676,13 +676,14 @@ Let's edit the `package.json`'s `test` command to force the test to fail.
 +  "test": "exit 1",
 ```
 
-Now if you try to push whatever code you'll fail because we have an `exit 1` in the command.
+Now if you try to push whatever code you'll fail because we have an `exit 1` in the command, which means the `test` process is not passed, forbiding you from pushing the `"un-test"` code to the remote repository.
 
 ```sh
+git commit -am 'chore: [TEST-1234] test commit'& \
 git push origin main
 ```
 
-![alt text](images/image-12.png)
+![alt text](image-16.png)
 
 Revert `exit 1` to `exit 0`, or use your **real test scripts** that can pass, your code push to the remote repository will succeed!
 
