@@ -128,19 +128,41 @@ npm install -D husky@9
 npx husky init
 ```
 
-What does the command `husky init` primarily do?
+It's necessary to break down what primarily happens after the execution of `husky init`.
 
-- create `hooksPath = .husky/_` in `.git/config`
+- Create the directory `.husky/_` and add the configuration of `hooksPath = .husky/_` to `.git/config`.
 
-- create `.husky/_/husky.sh`, `.husky/_/h` etc.
+  The `.husky/_` contains the actual hook scripts that Husky will execute in response to specific Git events.
 
-- create a `.husky/pre-commit` wit the script `npm test`
+  By setting `hooksPath = .husky/_`, it tells Git to look for hooks in the `.husky/_` directory instead of the default `.git/hooks`.
 
-- create a `prepare` script in `package.json` with the command `husky`
+- Create executable scripts such as `.husky/_/husky.sh` and `.husky/_/h` etc.
 
-> `husky` is in some way included within `husky init`.
+  `.husky/_/husky.sh` is the primary script that Husky injects into the hooks it manages, and `.husky/_/h` is its Shortcut.
 
-- create `.gitignore` in `.husky/_`
+- Create a script `.husky/pre-commit` with the command `npm test`.
+
+  This executable file is the actual **Git Pre-Commit Hook** we mentioned before, whatever **user-defined** behaviours you want to add should be placed here.
+
+  It's invoked by `.husky/_/husky.sh`.
+
+- Create the `prepare` command in `package.json` with the execution of `husky`.
+
+  Anyone who clones your Git repo and runs `npm install` will automatically invoke the `prepare` script. Then, `husky` will initiate `.husky/_` and configure `.git/hooks`.
+
+- Create a `.gitignore` in `.husky/_` with a single line `*`.
+
+  This prevents everything inside `.husky/_` from being pushed to the remote repository.
+
+  Why should `.husky/_` be excluded from Git version control?
+
+  The scripts under `.husky/_` should be generated dynamically according to different environments' configurations and behaviors (machines, operating systems, CI environments, etc.).
+
+  For example, the Windows system uses `\` as a path separator, while Linux uses `/`. Each system may have `Node.js` installed in a specific path. Each system may have its own `Node.js` version.
+
+  ...
+
+  You cannot create scripts that can be universally applied unless you're working inside the specific environment.
 
 ### Try A Commit
 
