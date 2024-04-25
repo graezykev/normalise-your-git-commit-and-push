@@ -443,7 +443,7 @@ In the previous steps, we introduced the Git Pre-Commit Hook, which activates im
 
 And after that, after the Git Pre-Commit Hook is triggered, the next hook is the Commit Message Hook, or specifically speaking, the `commit-msg` script. In this hook, you're able to get the **Commit Message** from the commit message editor or from the message you provide via `git commit -m 'message'`.
 
-Our next step is to validate the **format of the commit message**.
+Our next step is to validate the **format** of the commit message.
 
 **Why is format of the commit message so important?**
 
@@ -489,7 +489,7 @@ You will encounter this error:
 
 #### Why Dose It Fail?
 
-The test case above is mimicking a commit command of `git commit -m 'commit after fix index.js'`.
+The test case above is **mimicking** a commit command of `git commit -m 'commit after fix index.js'`.
 
 In this case, your **commit message** is `"commit after fixing index.js"`, but we have a **rule** for the commit message **format** configured in `commitlint.config.js`, which stipulates that the commit message should be structured as [follows](https://www.conventionalcommits.org/en/v1.0.0/#summary):
 
@@ -504,6 +504,8 @@ In this case, your **commit message** is `"commit after fixing index.js"`, but w
 i.e., your commit message must be at least formatted like `"feat: your commit description ..."`.
 
 However, Your message of `"commit after fixing index.js"` doesn't satisfy the rule, which means your commit will fail.
+
+We'll find out how to fix it later.
 
 ### 4.2. Add Message Format Linting to Commit Message Hook
 
