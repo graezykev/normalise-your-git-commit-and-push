@@ -366,7 +366,7 @@ npm install -D lint-staged
 
 ### Configure lint-staged
 
-Create a `lint-staged.config.js` file in the project root with the configuration below.
+Create a `lint-staged.config.js` file in the project root with the configuration below:
 
 ```js
 export default {
