@@ -479,6 +479,22 @@ That's the significance of adhering to a standard format for commit messages pro
 
 ### 4.1. Commit Message Format Linting
 
+Before we continue, Let's save our previous work first.
+
+```sh
+git checkout index.js
+```
+
+```sh
+git add .
+```
+
+```sh
+git commit -m "let's continue"
+```
+
+We're going to mention this **"let's continue"** later.
+
 #### Install Commit Message Linting Tools
 
 [commitlint](https://commitlint.js.org/) is the most important tool we need for this step.
