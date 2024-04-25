@@ -439,7 +439,7 @@ Then, commit the file `lint-staged.config.js`.
 git commit -m 'test lint-staged'
 ```
 
-This time, only the **newly added (staged)** file `lint-staged.config.js` is checked during your commit. You don't need to fix all the JavaScript files in the project, nor even all the JavaScript files you have modified, but just the **staged** file(s) you actually want to commit.
+This time, only the **newly added (staged)** file `lint-staged.config.js` is checked during your commit. You don't need to fix all the JavaScript files in the project, nor even all the JavaScript files you have modified (such as `index.js`), but just the **staged** file(s) you actually want to commit.
 
 ![alt text](images/image-5.png)
 
@@ -527,7 +527,7 @@ In this case, your **commit message** is `"test lint-staged"`, but we have a **r
 
 i.e., your commit message must be at least formatted like `"feat: your commit description ..."`.
 
-However, Your message of `"commit after fixing index.js"` doesn't satisfy the rule, which means your commit will fail.
+However, Your message of `"test lint-staged"` doesn't satisfy the rule, which means your commit will fail.
 
 We'll find out how to fix it later.
 
@@ -554,7 +554,10 @@ You'll see a newly created file `.husky/commit-msg` with the content below:
 The Commit Message Hook is ready, now test it.
 
 ```sh
-git add . & \
+git add .
+```
+
+```sh
 git commit -m "this will fail"
 ```
 
