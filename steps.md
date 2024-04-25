@@ -219,8 +219,10 @@ Changing it to `exit 0` will make the commit work.
 +  "test": "exit 0",
 ```
 
+Commit again:
+
 ```sh
-git commit -am 'first commit'
+git add . && git commit -m 'first commit'
 ```
 
 ![alt text](images/image-1.png)
