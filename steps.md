@@ -832,6 +832,10 @@ Unfortunately, you can still bypass the `pre-push` check and force push the code
 git push origin main --no-verify
 ```
 
+If you're using GitHub, you can even commit and push your code directly on the website.
+
+![alt text](images/image-0.png)
+
 To address this, we need **server-side** Git hooks or `CI` systems. However, these are more complex topics, and I won't delve deeply into them now. Perhaps I'll write another post to introduce them in the future.
 
 ## Conclusion: DIY your Workflows
