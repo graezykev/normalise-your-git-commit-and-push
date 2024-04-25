@@ -287,7 +287,7 @@ In the last step, we configured a command to lint our code style. Now, we're goi
 Add `npm run lint` to the first line of `.husky/pre-commit`.
 
 ```diff
-+ npm run lint
++npm run lint
 npm test
 ```
 
@@ -296,7 +296,10 @@ npm test
 Now, all commits will trigger the execution of this linting command.
 
 ```sh
-git add . & \
+git add .
+```
+
+```sh
 git commit -m 'second commit'
 ```
 
@@ -324,7 +327,10 @@ export const field = {
 Commit again and it should work.
 
 ```sh
-git add . & \
+git add .
+```
+
+```sh
 git commit -m 'commit after fix index.js'
 ```
 
@@ -336,7 +342,7 @@ By now, **both `npm run lint` and `npm test` must pass in the `pre-commit` hook 
 
 #### Better Linting
 
-I only made a very simple ESLint configuration here, which may be insufficient for a production project. To integrate a robust linting toolchain, you can check out another post of mine to learn more: [Configure ESLint in a TypeScript Project to Adhere to Standard JS](https://github.com/graezykev/ts-eslint-standard-js).
+I only made a very simple ESLint configuration here, which may be insufficient for a production project. To integrate a robust linting toolchain, you can check out another post of mine to learn more: [Configure ESLint in a TypeScript Project to Adhere to Standard JS](https://github.com/graezykev/ts-eslint-standard-js/blob/main/steps.md).
 
 ## 3. lint-staged
 
@@ -437,7 +443,19 @@ This time, only the **newly added (staged)** file `lint-staged.config.js` is che
 
 ![alt text](images/image-5.png)
 
-Remove the line `var b` in it, and then the commit will succeed.
+Comment out the line `var b` in `lint-staged.config.js`, and then the commit will succeed.
+
+```diff
+-var b // I included this line to intentionally elicit an error output in ESLint latter.
++// var b // I included this line to intentionally elicit an error output in ESLint latter.
+```
+
+```sh
+git add lint-staged.config.js && \
+git commit -m 'test lint-staged'
+```
+
+![alt text](images/image-001.png)
 
 ### lint-staged Other Files
 
@@ -489,15 +507,15 @@ npx commitlint --from HEAD~1 --to HEAD --verbose
 
 > "from HEAD~1 to HEAD" is your **latest commit**
 
-You will encounter this error:
+You will encounter the error:
 
 ![alt text](images/image-6.png)
 
 #### Why Dose It Fail?
 
-The test case above is **mimicking** a commit command of `git commit -m 'commit after fix index.js'`.
+The command above is **mimicking your last commit**. Do you recall what it was? Yes, it was `git commit -m 'test lint-staged'`. You can find the commit message through `git log`.
 
-In this case, your **commit message** is `"commit after fixing index.js"`, but we have a **rule** for the commit message **format** configured in `commitlint.config.js`, which stipulates that the commit message should be structured as [follows](https://www.conventionalcommits.org/en/v1.0.0/#summary):
+In this case, your **commit message** is `"test lint-staged"`, but we have a **rule** for the commit message **format** configured in `commitlint.config.js`, which stipulates that the commit message should be structured as [follows](https://www.conventionalcommits.org/en/v1.0.0/#summary):
 
 ```txt
 <type>[optional scope]: <description>
