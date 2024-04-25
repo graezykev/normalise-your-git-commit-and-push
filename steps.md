@@ -64,35 +64,35 @@ If you'd prefer to run the demo I've created instead of following the steps indi
 
 I would like to outline all the steps I'm gonna elaborate on in this post.
 
-1. [Init your Project](#1-init-your-project-if-you-havent)
+- 1 - [Init your Project](#1-init-your-project-if-you-havent)
 
-2. [Git Pre-Commit Hook](#2-git-pre-commit-hook)
+- 2 - [Git Pre-Commit Hook](#2-git-pre-commit-hook)
 
-- 2.1. [Create Pre-Commit Hook](#21-create-pre-commit-hook)
+  - 2.1 - [Create Pre-Commit Hook](#21-create-pre-commit-hook)
+  
+  - 2.2 - [Code Linting](#22-code-linting)
+  
+  - 2.3 - [Integrate Linting into the Pre-Commit Hook](#23-integrate-linting-into-the-pre-commit-hook)
+  
+  - 2.4 - [Brief Sum-Up](#24-brief-sum-up)
 
-- 2.2. [Code Linting](#22-code-linting)
+- 3 - [lint-staged](#3-lint-staged)
 
-- 2.3. [Integrate Linting into the Pre-Commit Hook](#23-integrate-linting-into-the-pre-commit-hook)
+- 4 - [Commit Message Hook](#4-commit-message-hook)
 
-- 2.4. [Brief Sum-Up](#24-brief-sum-up)
+  - 4.1 - [Commit Message Format Linting](#41-commit-message-format-linting)
+  
+  - 4.2 - [Add Message Format Linting to Commit Message Hook](#42-add-message-format-linting-to-commit-message-hook)
+  
+  - 4.3 - [Tailor your Commit Message Format](#43-tailor-your-commit-message-format)
 
-3. [lint-staged](#3-lint-staged)
+- 5 - [Git Push Hook](#5-git-push-hook)
 
-4. [Commit Message Hook](#4-commit-message-hook)
-
-- 4.1. [Commit Message Format Linting](#41-commit-message-format-linting)
-
-- 4.2. [Add Message Format Linting to Commit Message Hook](#42-add-message-format-linting-to-commit-message-hook)
-
-- 4.3. [Tailor your Commit Message Format](#43-tailor-your-commit-message-format)
-
-5. [Git Push Hook](#5-git-push-hook)
-
-- 5.1. [Incremental Code Linting](#51-incremental-code-linting)
-
-- 5.2. [Force test Before Push](#52-force-test-before-push)
-
-- 5.3 [Force Push](#53-force-push)
+  - 5.1 - [Incremental Code Linting](#51-incremental-code-linting)
+  
+  - 5.2 - [Force test Before Push](#52-force-test-before-push)
+  
+  - 5.3 - [Force Push](#53-force-push)
 
 But don't worry, each step is clear and straightforward.
 
