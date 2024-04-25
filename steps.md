@@ -168,6 +168,8 @@ It's necessary to break down what primarily happens after the execution of `husk
 
   It's invoked by `.husky/_/husky.sh`.
 
+  The `npm test` in it means: You want to commit the code? Oh, you have to pass the test first.
+
 - Create the `prepare` command in `package.json` with the execution of `husky`.
 
   Anyone who clones your Git repo and runs `npm install` will automatically invoke the `prepare` script. Then, `husky` will initiate `.husky/_` and configure `.git/hooks`.
