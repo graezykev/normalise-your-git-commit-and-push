@@ -632,7 +632,7 @@ git commit -m 'whatever I like' --no-verify
 
 See the `--no-verify` flag? This allows for a **forced commit**. It's like a hidden time bomb! You're not even able to stop your teammates from doing it sneakily!
 
-So, here we need a second defence line before those **forced committed** codes are pushed to our remote repository and pollute the codebase.
+So, here we need a second defence line before the **forced committed** code is pushed to our remote repository and pollute the codebase.
 
 I need to clarify what I mean by **Incremental Code** here.
 
