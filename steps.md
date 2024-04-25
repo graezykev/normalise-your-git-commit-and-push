@@ -225,7 +225,7 @@ Changing it to `exit 0` will make the commit work.
 
 ### 2.2. Code Linting
 
-For now, our **pre-commit** hook only includes a `test` command. Next, we'll add a **Linting** command to check the **Code Style** before you commit JavaScript code.
+For now, our **pre-commit** hook only includes a `test` command. Next, we'll add a Lint command to check the **Code Style** before you commit JavaScript code.
 
 #### Install & Configure Linting Tools
 
@@ -326,7 +326,7 @@ git commit -m 'commit after fix index.js'
 
 ### 2.4. Brief Sum-Up
 
-By now, **both `npm run lint` and `npm test` must pass in the `pre-commit` hook before you can commit**.
+By now, **both `npm run lint` and `npm test` must pass in the `pre-commit` hook before you can commit code**.
 
 #### Better Linting
 
