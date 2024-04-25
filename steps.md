@@ -219,6 +219,10 @@ Changing it to `exit 0` will make the commit work.
 +  "test": "exit 0",
 ```
 
+```sh
+git commit -am 'first commit'
+```
+
 ![alt text](images/image-1.png)
 
 > **In a real production project, you should specify your actual `test` command, such as Jest, Playwright, etc.**
