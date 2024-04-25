@@ -204,7 +204,7 @@ Here is what you'll see from the terminal console:
 
 ![alt text](images/image.png)
 
-It fails because the pre-commit hook runs the `test` job, which contains only an `exit 1` command in the `test` section of `package.json`.
+It fails because the pre-commit hook runs the `test` job, which contains an `exit 1`, in the `test` script of `package.json`.
 
 ```json
 "scripts": {
