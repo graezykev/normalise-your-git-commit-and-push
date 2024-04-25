@@ -342,15 +342,17 @@ Suppose you're working on a historical project with hundreds of JavaScript files
 
 Today, you integrated ESLint and Git commit hooks into the project, and tomorrow your teammate edits just one JavaScript file. However, they can't commit it because they are overwhelmed by all the historical linting issues in the whole project at once, which are identified by `npm run lint`.
 
-Here’s another example: You've spent a day developing a web page and have written several files like `header.js`, `aside.js`, `main.js`, `footer.js`, etc. But, only `header.js` is complete, the others are still under development.
+Here’s another example:
+
+You've spent a day developing a web page and have written several files like `header.js`, `aside.js`, `main.js`, `footer.js`, etc. But, only `header.js` is complete, the others are still under development.
 
 Now it's 5 o'clock, time to call it a day! You decide to commit `header.js` first, but you encounter similar obstacles as in the previous example.
 
-What we need is a way to commit only the **"code we really want to commit now"**, or more correctly, by Git terminology, the **staged** files.
+What we need is a way to commit only the **"code we really want to commit right now"**, or more correctly, by Git terminology, the **staged** files.
 
 In simple terms, **staged** files are those files you've added to the **[Git Staging Area](https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F#_the_three_states)** by `git add <filename>`.
 
-Only the code in the staging area should be **linted** with each commit.
+Only the code in the staging area should be linted with each commit.
 
 Now, let's see how to get it done.
 
@@ -413,7 +415,7 @@ export const field = {
 
 To let `lint-staged` identify what you're going to commit, first add the file you want to commit to the Git **Staging Area**.
 
-In this scenario, we have ESLint issues in both `lint-staged.config.js` and `index.js`, but let's say we only want to commit and lint `lint-staged.config.js`.
+In this scenario, we have ESLint issues in both `lint-staged.config.js` and `index.js`, but let's say we only want to commit `lint-staged.config.js` and don't want to commit `index.js`, ignoring the ESLint issues of `index.js` for now.
 
 ```sh
 git add lint-staged.config.js # don't add index.js
