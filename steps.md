@@ -784,13 +784,11 @@ All **Incremental Errors** will be caught!
 
 ### 5.2. Force `test` Before Push
 
-Let's modify our team's workflows.
+Next, I'm going to modify our team's workflow.
 
-Now I have decided to allow **linted** code **commits**, without the `test` verification.
+I will move the `npm test` command from the **Git  Pre-Commit Hook** hook to the **Git Push Hook** named `pre-push`.
 
-However, we will permit code **pushes** only if they have already passed the **test** verification.
-
-Therefore, we will move the `npm test` command from the **Git Commit Hook** hook to the **Git Push Hook** named `pre-push`.
+This is because I decide to allow **linted** code **commits**, without the `test` verification. I mean, we allow **"un-test"** code to be commit, but don't allow them to be pushed.
 
 To do that, edit `./husky/pre-commit`:
 
@@ -842,8 +840,11 @@ To address this, we need **server-side** Git hooks or `CI` systems. However, the
 
 In this post, I've delved into detailed steps to normalize our teams' Git workflow. My approach is just a basic framework; there are many Git hooks I haven't mentioned here. You should customize your Git hooks to tailor them to your team's workflow.
 
+For example, you may not agree with me that I move the `npm test` command from the **Git Pre-Commit Hook** to the **Git Push Hook**. Based on this post, I think you already know how to make your own choice and tailor your own workflows.
+
 Here are some additional steps you might consider:
 
+- Make use of the other Git Hooks I didn't introduce in this post to enhance your teamwork, such as `post-checkout`, `post-commit`, `pre-rebase`, etc.
 - Implement specific rules for commit message formatting after discussing with your teammates.
 - Perform both linting and testing in commits and pushes.
 - Add other commands or scripts to your Git commit/push hooks, such as sending an IM message or an email to notify your teammates of your changes.
