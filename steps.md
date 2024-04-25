@@ -338,9 +338,9 @@ Have you noticed the problem with `npm run lint` in the `pre-commit`?
 
 Yes, **all your JavaScript files in the project** are checked in this process. What is the problem, though?
 
-Suppose you're working on a historical project with hundreds of JavaScript files that had never integrated linting tools or Git commit hooks before, meaning there may be numerous code style issues in the existing code.
+Suppose you're working on a historical project with hundreds of JavaScript files that had never integrated linting tools or Git hooks before, meaning there may be numerous code style issues in the existing code.
 
-Today, you integrate these linting tools and Git commit hooks, and tomorrow your teammate edits just one JavaScript file. However, he can't commit it because he faces all the linting issues at once, which are identified by `npm run lint`.
+Today, you integrated ESLint and Git commit hooks into the project, and tomorrow your teammate edits just one JavaScript file. However, they can't commit it because they are overwhelmed by all the historical linting issues in the whole project at once, which are identified by `npm run lint`.
 
 Here’s another example: You've spent a day developing a web page and have written several files like `header.js`, `aside.js`, `main.js`, `footer.js`, etc. But, only `header.js` is complete, the others are still under development.
 
