@@ -126,7 +126,9 @@ The most simple way of specifying our commit message is to execute `git commit -
 
 After you run `git commit` without the `-m` option and commit message, Git typically opens an editor for you to enter a commit message (This editor could be Vim, Emacs, Nano, or whatever your default command-line text editor is set to).
 
-Returning to the **Git Pre-Commit Hook**, we can use it to perform checks (such as running the ESLint command), and if these checks fail, the commit action is blocked.
+Returning to the **Git Pre-Commit Hook**, it is triggered before the editor is opened, or before Git receives you commit message if you're using `-m`.
+
+We can use it to perform checks (such as running the ESLint command), and if these checks fail, the commit action is blocked.
 
 By sharing this **hook script**, you can ensure that every teammate commits only code that has been checked.
 
@@ -434,6 +436,8 @@ There are more linting tools that I won't go into deeply, but you can integrate 
 ## 4. Commit Message Hook
 
 In the previous steps, we introduced the Git Pre-Commit Hook, which activates immediately after you execute the `git commit` command but before the commit message editor opens or the commit is finalized.
+
+And after that, after the Git Pre-Commit Hook is triggered, the next hook is the Commit Message Hook, or specifically speaking, the `commit-msg` script. In this hook, you're able to get the **Commit Message** from the commit message editor or from the message you provide via `git commit -m 'message'`.
 
 Our next step is to validate the **format of the commit message**.
 
