@@ -64,6 +64,8 @@ If you'd prefer to run the demo I've created instead of following the steps indi
 
 I would like to outline all the steps I'm gonna elaborate on in this post.
 
+Tedious? Don't worry, each step is clear and straightforward. **Most of the time, you can copy and paste my commands and codes to follow the guide**.
+
 - 1 - [Init your Project](#1-init-your-project-if-you-havent)
 
 - 2 - [Git Pre-Commit Hook](#2-git-pre-commit-hook)
@@ -93,8 +95,6 @@ I would like to outline all the steps I'm gonna elaborate on in this post.
   - 5.2 - [Force test Before Push](#52-force-test-before-push)
   
   - 5.3 - [Force Push](#53-force-push)
-
-But don't worry, each step is clear and straightforward.
 
 ## 1. Init your Project (if you haven't)
 
