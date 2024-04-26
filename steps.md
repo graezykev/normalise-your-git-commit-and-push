@@ -384,7 +384,7 @@ export default {
   ]
 }
 
-var b // I included this line to intentionally elicit an error output in ESLint latter.
+var b // I included this line to intentionally elicit an error output in ESLint later.
 ```
 
 > Note: I use `export default xxx` here because my `package.json` includes the configuration `"type": "module"`. If you don't have this configuration, use `module.exports = xxx` instead.
@@ -445,8 +445,8 @@ You don't need to fix all the JavaScript files in the project, nor even all the 
 Let's comment out the line `var b` in `lint-staged.config.js` to fix its ESLint error, and then the commit will succeed.
 
 ```diff
--var b // I included this line to intentionally elicit an error output in ESLint latter.
-+// var b // I included this line to intentionally elicit an error output in ESLint latter.
+-var b // I included this line to intentionally elicit an error output in ESLint later.
++// var b // I included this line to intentionally elicit an error output in ESLint later.
 ```
 
 ```sh
@@ -603,7 +603,7 @@ Make some slightly adjustments:
 git commit -m "foo: this will also fail"
 ```
 
-As `foo` is not a valid `type`, it fails again.
+As `foo` is not a valid `type`, it fails again, But at least we have **one less problem** than the last commit.
 
 ![alt text](images/image-8.png)
 
@@ -716,21 +716,26 @@ Right now, we're going to push from `commit-c` to `commit-N`, and `commit-c` to 
 
 #### First Push
 
-Before making any changes and testing the incremental changes since the last push, we need to **push the code** first.
+Before making any changes and testing the incremental changes since the last push, it's **important** to **push the code** first.
 
-Later, we're going to make another push, which will be compared to this push as **Incremental Code**.
+Because later, we're going to make another push, which will be compared to this push as **Incremental Code**.
 
 ```sh
 git push origin main
 ```
 
-![alt text](fffss)
+![alt text](images/image-19.png)
 
 #### Incremental Code Linting Shell Script
 
-Create a **Shell script** file named `scripts/lint-incremental-push-files.sh` with the following code.
+Create a **Shell script** file named `scripts/lint-incremental-push-files.sh`.
 
-In this Shell script, we'll identify those **incremental** JavaScript files we want to **push**, and then run the ESLint command only on them.
+```sh
+mkdir scripts && \
+touch scripts/lint-incremental-push-files.sh
+```
+
+In this Shell script, we'll identify those **incremental** JavaScript files we want to **push**, and then run the ESLint command only on them. Input the following code into `lint-incremental-push-files.sh`.
 
 ```sh
 #!/bin/bash
@@ -815,7 +820,7 @@ export const field = {
 +var a
 ```
 
-You can not commit it because we have a `pre-commit` hook to lint the file and we just made a ESLint error in it.
+You **can not** commit it because we have a `pre-commit` hook to lint the file and we just made a ESLint error in it.
 
 ```sh
 git add . && \
@@ -849,9 +854,9 @@ git commit -am 'bypass eslint again to commit' --no-verify
 
 Just now, we have two commits including `index.js` and `eslint.config.js`, in which there are actually ESLint issues, but they were committed using tricks (`--no-verify`).
 
-The commits in the yellow rectangle are the so-called **incremental changes** to be pushed, but they should not be pushed since they have ESLint issues!
-
 ![alt text](images/image-14.png)
+
+The commits in the red rectangle are the so-called **incremental changes** to be pushed, but they should not be pushed since they have ESLint issues!
 
 But don't panic, we've got your back! They won't be able to be pushed because they will face the punishment of the **Git Push Hook** we made above!
 
@@ -864,6 +869,28 @@ git push origin main
 All **Incremental Errors** will be caught!
 
 ![alt text](images/image-15.png)
+
+You can not push them until fix the errors and commit again.
+
+`index.js`:
+
+```diff
+-var a
++// var a
+```
+
+`eslint.config.js`:
+
+```diff
+-var b;
++// var b;
+```
+
+```sh
+git add . && \
+git commit -m 'fix: [TEST-01] fix ESLint errors' && \
+git push oringin main
+```
 
 ### 5.2. Force `test` Before Push
 
