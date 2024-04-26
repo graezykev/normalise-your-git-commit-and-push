@@ -998,3 +998,5 @@ Here are some additional steps you might consider:
 - Perform both linting and testing in commits and pushes.
 - Add other commands or scripts to your Git commit/push hooks, such as sending an IM message or an email to notify your teammates of your changes.
 - Use your imagination to customize the workflow as you see fit.
+
+**Last but not least, any suggestions, corrections, questions, or disagreements will be greatly appreciated.**
