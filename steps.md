@@ -479,10 +479,27 @@ That's the significance of adhering to a standard format for commit messages pro
 
 ### 4.1. Commit Message Format Linting
 
-Before we continue, Let's save our previous work first.
+Now we have some un-saved works.
 
 ```sh
-git checkout index.js
+git status
+```
+
+![alt txt](fff)
+
+Before we continue, Let's revoke our last change in `index.js` and save our previous works first.
+
+```diff
++const process = {
++    env: {
++        bit: 2
++    }
++}
+
+export const field = {
+    "b": process.evn.bit,
+}
+
 ```
 
 ```sh
@@ -492,6 +509,8 @@ git add .
 ```sh
 git commit -m "let's continue"
 ```
+
+![alt txt](fffa)
 
 We're going to mention this **"let's continue"** later.
 
@@ -529,9 +548,9 @@ You will encounter the error:
 
 #### Why Dose It Fail?
 
-The command above is **mimicking your last commit**. Do you recall what it was? Yes, it was `git commit -m 'test lint-staged'`. You can find the commit message through `git log`.
+The command above is **mimicking your last commit**. Do you recall what it was? Yes, it was `git commit -m 'let's continue'`.
 
-In this case, your **commit message** is `"test lint-staged"`, but we have a **rule** for the commit message **format** configured in `commitlint.config.js`, which stipulates that the commit message should be structured as [follows](https://www.conventionalcommits.org/en/v1.0.0/#summary):
+In this case, your **commit message** is `"let's continue"`, but we have a **rule** for the commit message **format** configured in `commitlint.config.js`, which stipulates that the commit message should be structured as [follows](https://www.conventionalcommits.org/en/v1.0.0/#summary):
 
 ```txt
 <type>[optional scope]: <description>
@@ -543,7 +562,7 @@ In this case, your **commit message** is `"test lint-staged"`, but we have a **r
 
 i.e., your commit message must be at least formatted like `"feat: your commit description ..."`.
 
-However, Your message of `"test lint-staged"` doesn't satisfy the rule, which means your commit will fail.
+However, Your message of `"let's continue"` doesn't satisfy the rule, which means your commit will fail.
 
 We'll find out how to fix it later.
 
