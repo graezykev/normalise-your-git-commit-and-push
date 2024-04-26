@@ -405,14 +405,14 @@ And of course, modify your hook command accordingly in `.husky/pre-commit`.
 
 ### Use lint-staged
 
-Remove some code from `index.js`:
+Annotate the following code from `index.js`:
 
 ```diff
--const process = {
--    env: {
--        bit: 2
--    }
--}
++// const process = {
++//    env: {
++//        bit: 2
++//    }
++// }
 
 export const field = {
     "b": process.evn.bit,
@@ -473,6 +473,11 @@ git status
 Before we move on to our next Git Hook, let's revert our last change in `index.js` and save our previous work.
 
 ```diff
+-// const process = {
+-//    env: {
+-//        bit: 2
+-//    }
+-// }
 +const process = {
 +    env: {
 +        bit: 2
@@ -669,7 +674,7 @@ Oops! The commit fails as we just add a new rule to force a **"JIRA ticket ID"**
 Try another one:
 
 ```sh
-git commit -m 'chore: [PRJ-1234] a commit with sample id'
+git commit -m 'chore: [PRJ-1234] a commit with sample id' # the [PRJ-1234] is a fake ID
 ```
 
 You've got it!
