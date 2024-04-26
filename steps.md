@@ -840,6 +840,12 @@ git commit -am 'bypass eslint to commit' --no-verify
 Do a similar thing to `eslint.config.js` with a new line:
 
 ```diff
+import pluginJs from "@eslint/js";
+
+export default [
+  pluginJs.configs.recommended
+];
+
 +var b;
 ```
 
@@ -889,8 +895,10 @@ You can not push them until fix the errors and commit again.
 ```sh
 git add . && \
 git commit -m 'fix: [TEST-01] fix ESLint errors' && \
-git push oringin main
+git push origin main
 ```
+
+![alt text](images/image-20.png)
 
 ### 5.2. Force `test` Before Push
 
@@ -924,13 +932,23 @@ Let's edit the `package.json`'s `test` command to intentionally make the test fa
 Now, if you try to push any code, you'll fail because we have an `exit 1` in the command. This means the `test` process is not passed, preventing you from pushing the **"un-tested"** code to the remote repository.
 
 ```sh
-git commit -am 'chore: [TEST-1234] test commit'& \
+git add . && \
+git commit -am 'chore: [TEST-1234] test commit'
+```
+
+![alt text](images/image-21.png)
+
+This would have failed if we hadn't removed `npm test` from `pre-commit`.
+
+```sh
 git push origin main
 ```
 
+The push will fail because we just added a `test` in the `pre-push` hook, which means we need to ensure that the `test` succeeds before we can push our code.
+
 ![alt text](images/image-16.png)
 
-Revert `exit 1` to `exit 0`, or use your **actual test scripts** that can pass, your code push to the remote repository will succeed!
+Revert `exit 1` to `exit 0`, or in a real production project, use your **actual test scripts** that can pass, your code push to the remote repository will succeed!
 
 ### 5.3 Force Push
 
@@ -940,7 +958,7 @@ Unfortunately, you can still bypass the `pre-push` check and force push the code
 git push origin main --no-verify
 ```
 
-If you're using GitHub, you can even commit and push your code directly on the website.
+Or, if you're using GitHub, you can even commit and push your code directly on the website.
 
 ![alt text](images/image-0.png)
 
