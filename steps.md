@@ -420,15 +420,15 @@ export const field = {
 
 ```
 
-To let `lint-staged` identify what you're going to commit, first add the file you want to commit to the Git **Staging Area**.
-
 In this scenario, we have ESLint issues in both `lint-staged.config.js` and `index.js`, but let's say we don't want to commit `index.js` and ignore its ESLint issues for now.
+
+To let `lint-staged` identify what you're going to commit, first add the file you want to commit to the Git **Staging Area**.
 
 ```sh
 git add lint-staged.config.js # don't add index.js
 ```
 
-Then, commit the file `lint-staged.config.js`.
+Then, commit the file.
 
 ```sh
 git commit -m 'test lint-staged'
@@ -436,13 +436,13 @@ git commit -m 'test lint-staged'
 
 ![alt text](images/image-5.png)
 
-This time, only the **newly added (staged)** file `lint-staged.config.js` is checked during your commit.
+This time, only the **newly added**(staged) file `lint-staged.config.js` is checked during your commit.
 
 `index.js` was changed, and it obviously has ESLint errors, but it's not **staged**, so it's not checked in this commit.
 
 You don't need to fix all the JavaScript files in the project, nor even all the JavaScript files you have modified, but just the **staged** file(s) you actually want to commit.
 
-Let's comment out the line `var b` in `lint-staged.config.js`, and then the commit will succeed.
+Let's comment out the line `var b` in `lint-staged.config.js` to fix its ESLint error, and then the commit will succeed.
 
 ```diff
 -var b // I included this line to intentionally elicit an error output in ESLint latter.
@@ -546,7 +546,9 @@ You will encounter the error:
 
 #### Why Dose It Fail?
 
-The command above is **mimicking your last commit**. Do you recall what it was? Yes, it was `git commit -m 'let's continue'`.
+The command above is **mimicking your last commit**.
+
+Do you recall what it was? Yes, it was `git commit -m 'let's continue'`.
 
 In this case, your **commit message** is `"let's continue"`, but we have a **rule** for the commit message **format** configured in `commitlint.config.js`, which stipulates that the commit message should be structured as [follows](https://www.conventionalcommits.org/en/v1.0.0/#summary):
 
@@ -691,7 +693,9 @@ git add . && \
 git commit -m 'whatever I like' --no-verify
 ```
 
-See the `--no-verify` flag? This allows for a **forced commit**. It's like a hidden time bomb! You're not even able to stop your teammates from doing it sneakily!
+See the `--no-verify` flag? It can help you to **skip `pre-commit` and `commit-msg` hooks** we made above.
+
+This allows for a **forced commit**. It's like a hidden time bomb! You're not even able to stop your teammates from doing it sneakily!
 
 So, here we need a second defence line before the **forced committed** code is pushed to our remote repository and pollute the codebase.
 
@@ -709,6 +713,18 @@ Say we have the following commits: `commit-a` and `commit-b` have been pushed to
 | commit-a | the-day-before-yesterday | pushed |
 
 Right now, we're going to push from `commit-c` to `commit-N`, and `commit-c` to `commit-N` represent the **incremental code** in this context.
+
+#### First Push
+
+Before making any changes and testing the incremental changes since the last push, we need to **push the code** first.
+
+Later, we're going to make another push, which will be compared to this push as **Incremental Code**.
+
+```sh
+git push origin main
+```
+
+![alt text](fffss)
 
 #### Incremental Code Linting Shell Script
 
@@ -781,21 +797,25 @@ Now, this Shell script will run every time before your push. Your `git push` com
 
 #### Test Incremental Code Linting
 
-Before making any changes and testing the incremental changes since the last push, **we need to push the code first**.
-
-```sh
-git push origin main
-```
-
 Now, let's make some changes.
 
 Open `index.js` to add a simple line.
 
 ```diff
+const process = {
+    env: {
+        bit: 2
+    }
+}
+    
+export const field = {
+    "b": process.evn.bit,
+}
+
 +var a
 ```
 
-You can not commit it because we have a `pre-commit` hook to lint the file.
+You can not commit it because we have a `pre-commit` hook to lint the file and we just made a ESLint error in it.
 
 ```sh
 git add . && \
@@ -824,6 +844,8 @@ Bypass the check process again.
 git add . && \
 git commit -am 'bypass eslint again to commit' --no-verify
 ```
+
+#### Check and Push Incremental Code
 
 Just now, we have two commits including `index.js` and `eslint.config.js`, in which there are actually ESLint issues, but they were committed using tricks (`--no-verify`).
 
