@@ -245,6 +245,8 @@ npm install -D eslint@9 @eslint/js@9
 Create an `eslint.config.js` file with the code below:
 
 ```js
+// eslint.config.js
+
 import pluginJs from "@eslint/js";
 
 export default [
@@ -264,6 +266,8 @@ export default [
 #### Create a Demo `index.js`
 
 ```js
+// index.js
+
 export const field = {
     "b": process.evn.bit,
 }
@@ -310,6 +314,8 @@ You'll encounter a failure because you must fix all the linting errors (mentione
 Fix it by editing `index.js`:
 
 ```diff
+// index.js
+
 +const process = {
 +    env: {
 +        bit: 2
@@ -376,6 +382,8 @@ npm install -D lint-staged
 Create a `lint-staged.config.js` file in the project root with the configuration below:
 
 ```js
+// lint-staged.config.js
+
 export default {
   // You can lint other types of files with different tools.
   "*.{js,jsx,ts,tsx}": [
@@ -408,6 +416,8 @@ And of course, modify your hook command accordingly in `.husky/pre-commit`.
 Annotate the following code from `index.js`:
 
 ```diff
+// index.js
+
 +// const process = {
 +//    env: {
 +//        bit: 2
@@ -473,6 +483,8 @@ git status
 Before we move on to our next Git Hook, let's revert our last change in `index.js` and save our previous work.
 
 ```diff
+// index.js
+
 -// const process = {
 -//    env: {
 -//        bit: 2
@@ -631,6 +643,8 @@ For instance, your team is using [Jira](https://www.atlassian.com/software/jira)
 To do this, edit your `commitlint.config.js` as follows:
 
 ```js
+// commitlint.config.js
+
 export default {
   extends: ['@commitlint/config-conventional'],
   plugins: [
@@ -812,6 +826,8 @@ Now, let's make some changes.
 Open `index.js` to add a simple line.
 
 ```diff
+// index.js
+
 const process = {
     env: {
         bit: 2
