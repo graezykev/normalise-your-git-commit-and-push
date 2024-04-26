@@ -222,7 +222,8 @@ Changing it to `exit 0` will make the commit work.
 Commit again:
 
 ```sh
-git add . && git commit -m 'first commit'
+git add . && \
+git commit -m 'first commit'
 ```
 
 ![alt text](images/image-1.png)
@@ -296,10 +297,7 @@ npm test
 Now, all commits will trigger the execution of this linting command.
 
 ```sh
-git add .
-```
-
-```sh
+git add . && \
 git commit -m 'second commit'
 ```
 
@@ -327,10 +325,7 @@ export const field = {
 Commit again and it should work.
 
 ```sh
-git add .
-```
-
-```sh
+git add . && \
 git commit -m 'commit after fix index.js'
 ```
 
@@ -427,7 +422,7 @@ export const field = {
 
 To let `lint-staged` identify what you're going to commit, first add the file you want to commit to the Git **Staging Area**.
 
-In this scenario, we have ESLint issues in both `lint-staged.config.js` and `index.js`, but let's say we only want to commit `lint-staged.config.js` and don't want to commit `index.js`, ignoring the ESLint issues of `index.js` for now.
+In this scenario, we have ESLint issues in both `lint-staged.config.js` and `index.js`, but let's say we don't want to commit `index.js` and ignore its ESLint issues for now.
 
 ```sh
 git add lint-staged.config.js # don't add index.js
@@ -439,11 +434,15 @@ Then, commit the file `lint-staged.config.js`.
 git commit -m 'test lint-staged'
 ```
 
-This time, only the **newly added (staged)** file `lint-staged.config.js` is checked during your commit. You don't need to fix all the JavaScript files in the project, nor even all the JavaScript files you have modified (such as `index.js`), but just the **staged** file(s) you actually want to commit.
-
 ![alt text](images/image-5.png)
 
-Comment out the line `var b` in `lint-staged.config.js`, and then the commit will succeed.
+This time, only the **newly added (staged)** file `lint-staged.config.js` is checked during your commit.
+
+`index.js` was changed, and it obviously has ESLint errors, but it's not **staged**, so it's not checked in this commit.
+
+You don't need to fix all the JavaScript files in the project, nor even all the JavaScript files you have modified, but just the **staged** file(s) you actually want to commit.
+
+Let's comment out the line `var b` in `lint-staged.config.js`, and then the commit will succeed.
 
 ```diff
 -var b // I included this line to intentionally elicit an error output in ESLint latter.
@@ -460,6 +459,40 @@ git commit -m 'test lint-staged'
 ### lint-staged Other Files
 
 There are more linting tools that I won't go into deeply, but you can integrate them with `lint-staged`. For example, you can lint your **CSS** content with [Stylelint](https://stylelint.io/), or even lint your **README** files with [markdownlint](https://github.com/DavidAnson/markdownlint), etc.
+
+### Save other changes
+
+Now we have some unsaved work.
+
+```sh
+git status
+```
+
+![alt text](images/image-18.png)
+
+Before we move on to our next Git Hook, let's revert our last change in `index.js` and save our previous work.
+
+```diff
++const process = {
++    env: {
++        bit: 2
++    }
++}
+
+export const field = {
+    "b": process.evn.bit,
+}
+
+```
+
+```sh
+git add . && \
+git commit -m "let's continue"
+```
+
+![alt text](images/image-17.png)
+
+We're going to mention this **"let's continue"** later in our next Git Hook.
 
 ## 4. Commit Message Hook
 
@@ -478,41 +511,6 @@ Git commit message also **improves traceability**, by linking the commit to exte
 That's the significance of adhering to a standard format for commit messages promotes clarity, coherence, and collaboration within a team.
 
 ### 4.1. Commit Message Format Linting
-
-Now we have some un-saved works.
-
-```sh
-git status
-```
-
-![alt txt](fff)
-
-Before we continue, Let's revoke our last change in `index.js` and save our previous works first.
-
-```diff
-+const process = {
-+    env: {
-+        bit: 2
-+    }
-+}
-
-export const field = {
-    "b": process.evn.bit,
-}
-
-```
-
-```sh
-git add .
-```
-
-```sh
-git commit -m "let's continue"
-```
-
-![alt txt](fffa)
-
-We're going to mention this **"let's continue"** later.
 
 #### Install Commit Message Linting Tools
 
@@ -589,10 +587,7 @@ You'll see a newly created file `.husky/commit-msg` with the content below:
 The Commit Message Hook is ready, now test it.
 
 ```sh
-git add .
-```
-
-```sh
+git add . && \
 git commit -m "this will fail"
 ```
 
@@ -661,7 +656,7 @@ export default {
 Test it.
 
 ```sh
-git add . & \
+git add . && \
 git commit -m 'chore: try to commit'
 ```
 
@@ -803,7 +798,7 @@ Open `index.js` to add a simple line.
 You can not commit it because we have a `pre-commit` hook to lint the file.
 
 ```sh
-git add . & \
+git add . && \
 git commit -am 'bypass eslint to commit'
 ```
 
@@ -826,7 +821,7 @@ Do a similar thing to `eslint.config.js` with a new line:
 Bypass the check process again.
 
 ```sh
-git add . & \
+git add . && \
 git commit -am 'bypass eslint again to commit' --no-verify
 ```
 
