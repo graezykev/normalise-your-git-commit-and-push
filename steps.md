@@ -1,3 +1,7 @@
+# Normalise Your Git Commit and Push Processes
+
+**Using `husky`, `eslint`, `lint-stage`, `commitlint` and straightforward Shell scripts.**
+
 ## Introduction
 
 Today's topic revolves around leveraging Git Hooks to streamline Git workflows, focusing on code linting before commits and pushes, and standardizing the format of commit messages.
