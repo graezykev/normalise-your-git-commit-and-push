@@ -126,7 +126,7 @@ What is commit message editor?
 
 The most simple way of specifying our commit message is to execute `git commit -m 'my commit message'`. However, there's a more interactive way to commit using `git commit`.
 
-![alt](images/terminal.gif)
+![Git Hook](images/terminal.gif)
 
 After you run `git commit` without the `-m` option and commit message, Git typically opens an editor for you to enter a commit message (This editor could be Vim, Emacs, Nano, or whatever your default command-line text editor is set to).
 
@@ -206,7 +206,7 @@ git commit -m 'first commit'
 
 Here is what you'll see from the terminal console:
 
-![alt text](images/image.png)
+![Git Hook](images/image.png)
 
 It fails because the pre-commit hook runs the `test` job, which contains an `exit 1`, in the `test` script of `package.json`.
 
@@ -230,7 +230,7 @@ git add . && \
 git commit -m 'first commit'
 ```
 
-![alt text](images/image-1.png)
+![Git Hook](images/image-1.png)
 
 > **In a real production project, you should specify your actual `test` command, such as Jest, Playwright, etc.**
 
@@ -285,7 +285,7 @@ npm run lint
 
 This will produce some errors because we haven't defined the variable `process` in the demo code, which is not allowed according to the ESLint rule.
 
-![alt text](images/image-3.png)
+![Git Hook](images/image-3.png)
 
 ### 2.3. Integrate Linting into the Pre-Commit Hook
 
@@ -311,7 +311,7 @@ git commit -m 'second commit'
 
 You'll encounter a failure because you must fix all the linting errors (mentioned above) before committing the code.
 
-![alt text](images/image-2.png)
+![Git Hook](images/image-2.png)
 
 #### Fix the Linting Errors
 
@@ -339,7 +339,7 @@ git add . && \
 git commit -m 'commit after fix index.js'
 ```
 
-![alt text](images/image-4.png)
+![Git Hook](images/image-4.png)
 
 ### 2.4. Brief Sum-Up
 
@@ -448,7 +448,7 @@ Then, commit the file.
 git commit -m 'test lint-staged'
 ```
 
-![alt text](images/image-5.png)
+![Git Hook](images/image-5.png)
 
 This time, only the **newly added**(staged) file `lint-staged.config.js` is checked during your commit.
 
@@ -468,7 +468,7 @@ git add lint-staged.config.js && \
 git commit -m 'test lint-staged'
 ```
 
-![alt text](images/image-001.png)
+![Git Hook](images/image-001.png)
 
 ### lint-staged Other Files
 
@@ -482,7 +482,7 @@ Now we have some unsaved work.
 git status
 ```
 
-![alt text](images/image-18.png)
+![Git Hook](images/image-18.png)
 
 Before we move on to our next Git Hook, let's revert our last change in `index.js` and save our previous work.
 
@@ -511,7 +511,7 @@ git add . && \
 git commit -m "let's continue"
 ```
 
-![alt text](images/image-17.png)
+![Git Hook](images/image-17.png)
 
 We're going to mention this **"let's continue"** later in our next Git Hook.
 
@@ -563,7 +563,7 @@ npx commitlint --from HEAD~1 --to HEAD --verbose
 
 You will encounter the error:
 
-![alt text](images/image-6.png)
+![Git Hook](images/image-6.png)
 
 #### Why Dose It Fail?
 
@@ -616,7 +616,7 @@ git commit -m "this will fail"
 
 It fails because neither a `type` nor a `subject` is specified.
 
-![alt text](images/image-7.png)
+![Git Hook](images/image-7.png)
 
 Make some slightly adjustments:
 
@@ -626,7 +626,7 @@ git commit -m "foo: this will also fail"
 
 As `foo` is not a valid `type`, it fails again, But at least we have **one less problem** than the last commit.
 
-![alt text](images/image-8.png)
+![Git Hook](images/image-8.png)
 
 Modify the message once more:
 
@@ -636,7 +636,7 @@ git commit -m "chore: this is a legal commit message"
 
 Hooray!
 
-![alt text](images/image-9.png)
+![Git Hook](images/image-9.png)
 
 ### 4.3. Tailor your Commit Message Format
 
@@ -687,7 +687,7 @@ git commit -m 'chore: try to commit'
 
 Oops! The commit fails as we just add a new rule to force a **"JIRA ticket ID"** in the commit message's subject.
 
-![alt text](images/image-10.png)
+![Git Hook](images/image-10.png)
 
 Try another one:
 
@@ -697,7 +697,7 @@ git commit -m 'chore: [PRJ-1234] a commit with sample id' # the [PRJ-1234] is a 
 
 You've got it!
 
-![alt text](images/image-11.png)
+![Git Hook](images/image-11.png)
 
 ## 5. Git Push Hook
 
@@ -747,7 +747,7 @@ Because later, we're going to make another push, which will be compared to this 
 git push origin main
 ```
 
-![alt text](images/image-19.png)
+![Git Hook](images/image-19.png)
 
 #### Incremental Code Linting Shell Script
 
@@ -852,7 +852,7 @@ git add . && \
 git commit -am 'bypass eslint to commit'
 ```
 
-![alt text](images/image-12.png)
+![Git Hook](images/image-12.png)
 
 But you can bypass the check with `--no-verify`.
 
@@ -860,7 +860,7 @@ But you can bypass the check with `--no-verify`.
 git commit -am 'bypass eslint to commit' --no-verify
 ```
 
-![alt text](images/image-13.png)
+![Git Hook](images/image-13.png)
 
 Do a similar thing to `eslint.config.js` with a new line:
 
@@ -885,7 +885,7 @@ git commit -am 'bypass eslint again to commit' --no-verify
 
 Just now, we have two commits including `index.js` and `eslint.config.js`, in which there are actually ESLint issues, but they were committed using tricks (`--no-verify`).
 
-![alt text](images/image-14.png)
+![Git Hook](images/image-14.png)
 
 The commits in the red rectangle are the so-called **incremental changes** to be pushed, but they should not be pushed since they have ESLint issues!
 
@@ -899,7 +899,7 @@ git push origin main
 
 All **Incremental Errors** will be caught!
 
-![alt text](images/image-15.png)
+![Git Hook](images/image-15.png)
 
 You can not push them until fix the errors and commit again.
 
@@ -923,7 +923,7 @@ git commit -m 'fix: [TEST-01] fix ESLint errors' && \
 git push origin main
 ```
 
-![alt text](images/image-20.png)
+![Git Hook](images/image-20.png)
 
 ### 5.2. Force `test` Before Push
 
@@ -961,7 +961,7 @@ git add . && \
 git commit -am 'chore: [TEST-1234] test commit'
 ```
 
-![alt text](images/image-21.png)
+![Git Hook](images/image-21.png)
 
 This would have failed if we hadn't removed `npm test` from `pre-commit`.
 
@@ -971,7 +971,7 @@ git push origin main
 
 The push will fail because we just added a `test` in the `pre-push` hook, which means we need to ensure that the `test` succeeds before we can push our code.
 
-![alt text](images/image-16.png)
+![Git Hook](images/image-16.png)
 
 Revert `exit 1` to `exit 0`, or in a real production project, use your **actual test scripts** that can pass, your code push to the remote repository will succeed!
 
@@ -985,7 +985,7 @@ git push origin main --no-verify
 
 Or, if you're using GitHub, you can even commit and push your code directly on the website.
 
-![alt text](images/image-0.png)
+![Git Hook](images/image-0.png)
 
 To address this, we need **server-side** Git hooks or `CI` systems. However, these are more complex topics, and I won't delve deeply into them now. Perhaps I'll write another post to introduce them in the future.
 
