@@ -126,7 +126,7 @@ What is commit message editor?
 
 The most simple way of specifying our commit message is to execute `git commit -m 'my commit message'`. However, there's a more interactive way to commit using `git commit`.
 
-![Git Hook](images/terminal.gif)
+![commit message editor](images/terminal.gif)
 
 After you run `git commit` without the `-m` option and commit message, Git typically opens an editor for you to enter a commit message (This editor could be Vim, Emacs, Nano, or whatever your default command-line text editor is set to).
 
