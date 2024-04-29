@@ -991,7 +991,7 @@ To address this, we need **server-side** Git hooks or `CI` systems. However, the
 
 ## Conclusion: DIY your Workflows
 
-In this post, I've delved into detailed steps to normalize our teams' Git workflow. My approach is just a basic framework; there are many Git hooks I haven't mentioned here. You should customize your Git hooks to tailor them to your team's workflow.
+In this post, I've delved into detailed steps to normalise our teams' Git workflow. My approach is just a basic framework; there are many Git hooks I haven't mentioned here. You should customize your Git hooks to tailor them to your team's workflow.
 
 For example, you may not agree with me that I move the `npm test` command from the **Git Pre-Commit Hook** to the **Git Push Hook**. Based on this post, I think you already know how to make your own choice and tailor your own workflows.
 
