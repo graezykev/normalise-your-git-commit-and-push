@@ -1,4 +1,4 @@
-# Streamline Your Workflow: A Guide to Normalizing Git Commit and Push Processes
+# Streamline Your Workflow: A Guide to Normalising Git Commit and Push Processes
 
 Discover how to streamline your Git commit and push processes using a robust toolkit comprising `Husky`, `ESLint`, `lint-staged`, `Commitlint`, and simple `Shell` scripts. This guide will help you automate and standardise your version control workflow, ensuring consistency and efficiency in your development projects. Dive into practical setups and tips to make your Git operations seamless and error-free.
 
