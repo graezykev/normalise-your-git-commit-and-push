@@ -347,7 +347,7 @@ By now, **both `npm run lint` and `npm test` must pass in the `pre-commit` hook 
 
 #### Better Linting
 
-I only made a very simple ESLint configuration here, which may be insufficient for a production project. To integrate a robust linting toolchain, you can check out another post of mine to learn more: [Configure ESLint in a TypeScript Project to Adhere to Standard JS](https://github.com/graezykev/ts-eslint-standard-js/blob/main/steps.md).
+I only made a very simple ESLint configuration here, which may be insufficient for a production project. To integrate a robust linting toolchain, you can check out another post of mine to learn more: [Mastering Code Quality: Setting Up ESLint with Standard JS in TypeScript Projects](https://github.com/graezykev/ts-eslint-standard-js).
 
 ## 3. lint-staged
 
